@@ -23,6 +23,6 @@ public class UIControls : BaseBehaviour
         config = transform.Find("Panel/Config").GetComponent<UnityEngine.UI.Button>();
         button = transform.Find("Button").GetComponent<UnityEngine.UI.Button>();
 
-        button.onClick.AddListener(R.PlayerInputManager.PromptAdvance);
+        button.onClick.AddListener(R.PlayerInputSystem.PromptAdvance);
     }
 }

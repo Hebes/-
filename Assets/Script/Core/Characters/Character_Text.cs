@@ -1,6 +1,8 @@
-﻿    public class Character_Text:Character
+﻿    using UnityEngine;
+
+    public class Character_Text:Character
     {
-        public Character_Text(string name) : base(name)
+        public Character_Text(string name, CharacterConfigData config, GameObject prefab) : base(name, config, prefab)
         {
         }
     }

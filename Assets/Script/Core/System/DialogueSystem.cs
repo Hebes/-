@@ -18,6 +18,24 @@ public class DialogueSystem : SingletonMono<DialogueSystem>
     /// </summary>
     private List<string> _filtrationSpeakerName = new List<string>() { "narrator" };
 
+    /// <summary>
+    /// 将说话者数据应用到对话容器中
+    /// </summary>
+    /// <param name="speakerName"></param>
+    public void ApplySpeakerDataToDialogueContainer(string speakerName)
+    {
+        Character character = R.CharacterSystem.GetCharacter(speakerName);
+        CharacterConfigData config = character != null ? character.Config : R.CharacterSystem.GetCharacterConfig(speakerName);
+        ApplySpeakerDataToDialogueContainer(config);
+    }
+
+    public void ApplySpeakerDataToDialogueContainer(CharacterConfigData config)
+    {
+        R.DialogueContainer.SetDialogueColor(config.dialogueColor);
+        R.DialogueContainer.SetDialogueFont(config.dialogueFont);
+        R.NameContainer.SetNameColor(config.nameColor);
+        R.NameContainer.SetNameFont(config.nameFont);
+    }
 
     /// <summary>
     /// 开启使用提示下一步
@@ -27,15 +45,15 @@ public class DialogueSystem : SingletonMono<DialogueSystem>
         GameEvent.UsePrompt_Next.Trigger(null);
     }
 
-    public void Say(string speaker, string dialogue)
+    public Coroutine Say(string speaker, string dialogue)
     {
-        // List<string> conversation = new List<string>() { $"{speaker} \"{dialogue}\"" };
-        // Say(conversation);
+        List<string> conversation = new List<string>() { $"{speaker} \"{dialogue}\"" };
+        return ConversationManager.StartConversation(conversation);
     }
 
-    public void Say(List<string> conversation)
+    public Coroutine Say(List<string> conversation)
     {
-        ConversationManager.StartConversation(conversation);
+        return ConversationManager.StartConversation(conversation);
     }
 
     public void ShowSpeakerName(string speakerName)

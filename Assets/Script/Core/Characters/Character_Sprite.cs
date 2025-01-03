@@ -1,6 +1,8 @@
-﻿    public class Character_Sprite:Character
+﻿using UnityEngine;
+
+public class Character_Sprite : Character
+{
+    public Character_Sprite(string name, CharacterConfigData config, GameObject prefab) : base(name, config, prefab)
     {
-        public Character_Sprite(string name) : base(name)
-        {
-        }
     }
+}

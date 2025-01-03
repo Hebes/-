@@ -12,12 +12,15 @@ public class NameContainer : SingletonMono<NameContainer>
         NameText = transform.Find("Image/NameText").GetComponent<TMPro.TextMeshProUGUI>();
         root = NameText.gameObject;
     }
+    
+    public void SetNameColor(Color color) => NameText.color = color;
+    public void SetNameFont(TMP_FontAsset font) => NameText.font = font;
 
     public void Show(string nameValue)
     {
         root.SetActive(true);
         if (!nameValue.IsNullOrEmpty())
-            NameText.text = nameValue;
+            NameText.text = R.LanguageSystem.GetLanguage(nameValue) ;
     }
     
     public void Hide()

@@ -26,10 +26,10 @@ public class ConversationManager
         _usePrompt = true;
     }
 
-    public void StartConversation(List<string> conversation)
+    public Coroutine StartConversation(List<string> conversation)
     {
         StopConversation();
-        _process = R.DialogueSystem.StartCoroutine(RunningConversation(conversation));
+        return _process = R.DialogueSystem.StartCoroutine(RunningConversation(conversation));
     }
 
     private void StopConversation()

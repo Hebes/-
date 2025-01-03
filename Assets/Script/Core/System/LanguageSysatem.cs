@@ -23,7 +23,8 @@ public class LanguageSysatem : SingletonMono<LanguageSysatem>
     {
         foreach (LanguageData languageData in LanguageList)
         {
-            if (languageData.key.Equals(key) || languageData.Engilsh.Equals(key))
+            if (languageData.key.Equals(key) ||
+                languageData.Engilsh.Equals(key))
             {
                 switch (languageType)
                 {

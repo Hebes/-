@@ -60,8 +60,7 @@ public class TextArchitect
         preText = "";
         targetText = text;
         Stop();
-        buildProcess = tmpro.StartCoroutine(Building());
-        return buildProcess;
+        return buildProcess = tmpro.StartCoroutine(Building());
     }
 
     /// <summary>
@@ -74,8 +73,7 @@ public class TextArchitect
         preText = tmpro.text;
         targetText = text;
         Stop();
-        buildProcess = tmpro.StartCoroutine(Building());
-        return buildProcess;
+        return buildProcess = tmpro.StartCoroutine(Building());
     }
 
     public Coroutine buildProcess = null;

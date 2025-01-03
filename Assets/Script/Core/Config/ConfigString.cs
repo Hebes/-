@@ -23,6 +23,11 @@ public class ConfigString
     public const char AXISDELIMITER_ID = ':';
     public const char EXPRESSIONLAYER_JOINER = ',';
     public const char EXPRESSIONLAYER_DELIMITER = ':';
+    
+    //角色预制体路径
+    public const string CHARACTER_NAME_ID = "<charname>";
+    public static readonly string CharacterRootPath = $"Character/{CHARACTER_NAME_ID}";
+    public static readonly string CharacterPrefabPath = $"{CharacterRootPath}/Character - [{CHARACTER_NAME_ID}]";
 
     #endregion
 }

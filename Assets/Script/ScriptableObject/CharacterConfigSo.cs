@@ -8,6 +8,11 @@ public class CharacterConfigSo : ScriptableObject
 {
     public CharacterConfigData[] characterArray;
 
+    /// <summary>
+    /// 获取配置文件
+    /// </summary>
+    /// <param name="characterName"></param>
+    /// <returns></returns>
     public CharacterConfigData GetConfig(string characterName)
     {
         characterName = characterName.ToLower();
