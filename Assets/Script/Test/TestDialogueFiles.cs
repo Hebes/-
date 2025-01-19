@@ -18,12 +18,13 @@ public class TestDialogueFiles : BaseBehaviour
     void Start()
     {
         StartConversation();
+        AudioSystem audioSystem = AudioSystem.I;
     }
 
     void StartConversation()
     {
         //List<string> lines = FileManager.ReadTextAsset("GameData/testFile");
-        List<string> lines = FileManager.ReadTextAsset(DialogueTextAsset);
+        List<string> lines = FileSystem.ReadTextAsset(DialogueTextAsset);
         DialogueSystem.I.Say(lines);
         // foreach (var sLine in lines)
         // {

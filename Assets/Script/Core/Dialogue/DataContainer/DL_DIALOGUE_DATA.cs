@@ -7,17 +7,26 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class DL_DIALOGUE_DATA
 {
-    public List<DIALOGUE_SEGMENT> segments;
+    /*
+     * {c}    =clear
+     * {a}    =append
+     * {wc n} =wait clear number
+     * {wa n} =wait append number
+     */
+    public const string SegmentIdentifierPattern = @"\{[ca]\}|\{w[ca]\s\d*\.?\d*\}";
+    public string RawData { get; private set; } = string.Empty;
+    public List<DIALOGUE_SEGMENT> Segments;
 
     public DL_DIALOGUE_DATA(string rawDialogue)
     {
-        segments = RipSegments(rawDialogue);
+        RawData = rawDialogue;
+        Segments = RipSegments(rawDialogue);
     }
 
     private List<DIALOGUE_SEGMENT> RipSegments(string rawDialogue)
     {
         List<DIALOGUE_SEGMENT> segments = new List<DIALOGUE_SEGMENT>();
-        MatchCollection matches = Regex.Matches(rawDialogue, ConfigString.SegmentIdentifierPattern);
+        MatchCollection matches = Regex.Matches(rawDialogue, SegmentIdentifierPattern);
         int lastIndex = 0;
         //查找filedialgue_segment中的第一个或唯一一个段
         DIALOGUE_SEGMENT segment = new DIALOGUE_SEGMENT();

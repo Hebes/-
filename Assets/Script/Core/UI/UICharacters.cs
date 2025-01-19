@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
 
-public class UICharacters : SingletonMono<UICharacters>
+[NoDontDestroyOnLoad]
+public class UICharacters : SM<UICharacters>
 {
 
 }

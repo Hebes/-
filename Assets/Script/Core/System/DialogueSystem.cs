@@ -1,22 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 对话系统
 /// </summary>
-public class DialogueSystem : SingletonMono<DialogueSystem>
+public class DialogueSystem : SM<DialogueSystem>, IBehaviour
 {
     public DialogueSystemConfigurationSO Config => DB.I.DialogueSystemConfigurationSo;
-    private ConversationManager ConversationManager { get; set; } = new ConversationManager();
-    public TextArchitect TextArchitect { get; set; } = new TextArchitect();
+    public ConversationManager ConversationManager;
+    public TextArchitect TextArchitect; //文本构建
+    public AutoReader autoReader; //自动阅读
+    public CanvasGroup mainCanvas;
+    public CanvasGroupController CgController; //画布组控制
+    public DialogueContainer dialogueContainer = new DialogueContainer();
 
+    private List<string> _filtrationSpeakerName; // 过滤说话人的名称的列表
     public bool IsRunningConversation => ConversationManager.isRunning;
+    public DialogueContinuePrompt Prompt => R.UISystem.UIDialogue.dialoguePrompt;
+    public bool IsVisible => CgController.IsVisible;
 
-    /// <summary>
-    /// 过滤说话人的名称的列表
-    /// </summary>
-    private List<string> _filtrationSpeakerName = new List<string>() { "narrator" };
+    public delegate void DialogueSystemEvent();
+
+    public event DialogueSystemEvent onUserPromptNext;
+    public event DialogueSystemEvent onClear;
+
+    public void OnGetComponent()
+    {
+        mainCanvas = GameObject.Find("CanvasMain").FindComponent<CanvasGroup>();
+        gameObject.AddComponent<AutoReader>();
+        if (TryGetComponent(out autoReader))
+            autoReader.Initialize();
+    }
+
+    public void OnNewClass()
+    {
+        _filtrationSpeakerName = new List<string>() { "narrator" };
+        TextArchitect = new TextArchitect();
+        ConversationManager = new ConversationManager();
+        CgController = new CanvasGroupController(this, mainCanvas);
+    }
+
 
     /// <summary>
     /// 将说话者数据应用到对话容器中
@@ -31,30 +56,85 @@ public class DialogueSystem : SingletonMono<DialogueSystem>
 
     public void ApplySpeakerDataToDialogueContainer(CharacterConfigData config)
     {
-        R.DialogueContainer.SetDialogueColor(config.dialogueColor);
-        R.DialogueContainer.SetDialogueFont(config.dialogueFont);
-        R.NameContainer.SetNameColor(config.nameColor);
-        R.NameContainer.SetNameFont(config.nameFont);
+        UIDialogue uiDialogue = R.UISystem.UIDialogue;
+        float fontSize = Config.defaultDialogueFontSize * config.dialogueFontScale * Config.dialogueFontScale;
+        uiDialogue.SetDialogueColor(config.dialogueColor);
+        uiDialogue.SetDialogueFont(config.dialogueFont);
+        uiDialogue.SetDialogueFontSize(fontSize);
+
+        fontSize = Config.defaultNameFontSize * config.nameFontScale;
+        uiDialogue.SetNameColor(config.nameColor);
+        uiDialogue.SetNameFont(config.nameFont);
+        uiDialogue.SetNameFontSize(fontSize);
     }
 
     /// <summary>
     /// 开启使用提示下一步
     /// </summary>
-    public void OnUsePrompt_Next()
+    public void OnUserPrompt_Next()
     {
-        GameEvent.UsePrompt_Next.Trigger(null);
+        R.DialogueSystem.onUserPromptNext?.Invoke();
+        autoReader?.Disable();
     }
+
+    public void OnSystemPrompt_Next()
+    {
+        R.DialogueSystem.onUserPromptNext?.Invoke();
+    }
+
+    public void OnSystemPrompt_Clear()
+    {
+        R.DialogueSystem.onClear?.Invoke();
+    }
+
+    #region 历史记录
+
+    public void OnStartViewingHistory()
+    {
+        Prompt.Hide();
+        autoReader.allowToggle = false;
+        ConversationManager.allowUserPrompts = false;
+
+        if (autoReader.IsOn)
+            autoReader.Disable();
+    }
+
+    public void OnStopViewingHistory()
+    {
+        Prompt.Show();
+        autoReader.allowToggle = true;
+        ConversationManager.allowUserPrompts = true;
+    }
+
+    #endregion
+
+    #region 说话
 
     public Coroutine Say(string speaker, string dialogue)
     {
-        List<string> conversation = new List<string>() { $"{speaker} \"{dialogue}\"" };
+        List<string> lines = new List<string>() { $"{speaker} \"{dialogue}\"" };
+        Conversation conversation = new Conversation(lines);
         return ConversationManager.StartConversation(conversation);
     }
 
-    public Coroutine Say(List<string> conversation)
+    public Coroutine Say(List<string> lines)
+    {
+        Conversation conversation = new Conversation(lines);
+        return ConversationManager.StartConversation(conversation);
+    }
+
+    public Coroutine Say(Conversation conversation)
     {
         return ConversationManager.StartConversation(conversation);
     }
+
+    #endregion
+
+    #region 说话框
+
+    public Coroutine Show(float speed = 1f, bool immediate = false) => CgController.Show(speed, immediate);
+    public Coroutine Hide(float speed = 1f, bool immediate = false) => CgController.Hide(speed, immediate);
+
 
     public void ShowSpeakerName(string speakerName)
     {
@@ -69,13 +149,15 @@ public class DialogueSystem : SingletonMono<DialogueSystem>
         }
 
         if (jump)
-            NameContainer.I.Hide();
+            HideSpeakerName();
         else
-            NameContainer.I.Show(speakerName);
+            R.UISystem.UIDialogue.Show(speakerName);
     }
 
     public void HideSpeakerName()
     {
-        NameContainer.I.Hide();
+        R.UISystem.UIDialogue.Hide();
     }
+
+    #endregion
 }

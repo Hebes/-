@@ -6,12 +6,15 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class DialogueParser
 {
+    public const string CommandRegexPattern = @"[\w\[\]]*[^\s]\(";
+
     public static DIALOGUE_LINE Parse(string rawLine)
     {
-        $"解析行-'{rawLine}".Log();
+        //$"解析行-'{rawLine}".Log();
         (string speaker, string dialogue, string commands) = RipContent(rawLine);
-        $" speaker = {speaker}\n dialogue = {dialogue}\n commands = {commands}".Log();
-        return new DIALOGUE_LINE(speaker, dialogue, commands);
+        commands = TagSystem.Inject(commands);
+        $" 说话者 = {speaker}\n 对话内容 = {dialogue}\n 命令 = {commands}".Log();
+        return new DIALOGUE_LINE(rawLine, speaker, dialogue, commands);
     }
 
     /// <summary>
@@ -25,8 +28,8 @@ public class DialogueParser
         string dialogue = String.Empty; //发言内容
         string commands = String.Empty; //命令
         int dialogueStart = -1; //是否对话开始
-        bool isEscaped = false;
         int dialogueEnd = -1; //是否对话结束
+        bool isEscaped = false;
 
         for (int i = 0; i < rawLine.Length; i++)
         {
@@ -46,8 +49,8 @@ public class DialogueParser
             }
         }
 
-        //识别命令模式
-        Regex commandRegex = new Regex(ConfigString.CommandRegexPattern);
+        //识别命令模式  4.5 
+        Regex commandRegex = new Regex(CommandRegexPattern);
 
         MatchCollection matches = commandRegex.Matches(rawLine);
         int commandStart = -1;
@@ -63,10 +66,10 @@ public class DialogueParser
         if (commandStart != -1 && (dialogueStart == -1 && dialogueEnd == -1))
             return ("", "", rawLine.Trim());
 
-        //If we are here then we either have dialogue or a multi word argument in a command. Figure out if this is dialogue.
+        //如果我们在这里，那么我们在命令中要么有对话，要么有多词的参数。弄清楚这是不是对话。
         if (dialogueStart != -1 && dialogueEnd != -1 && (commandStart == -1 || commandStart > dialogueEnd))
         {
-            //we know that we have valid dialogue
+            //我们知道我们之间的对话是有效的
             speaker = rawLine.Substring(0, dialogueStart).Trim();
             dialogue = rawLine.Substring(dialogueStart + 1, dialogueEnd - dialogueStart - 1).Replace("\\\"", "\"");
             if (commandStart != -1)
@@ -77,7 +80,8 @@ public class DialogueParser
         else
             dialogue = rawLine;
 
-        //rawLine.Substring(dialogueStart + 1, (dialogueEnd - dialogueStart) - 1).Log();
+        // if (dialogueStart == -1 || dialogueEnd == -1)
+        //     $"{rawLine}的标点符号有问题(单独一个说话请忽略这个问题)".LogError();
         return (speaker, dialogue, commands);
     }
 }

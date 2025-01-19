@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class Testing_Architect : BaseBehaviour
 {
     private TextArchitect _architect;
-    public TextArchitect.BuildMethod bm = TextArchitect.BuildMethod.instant;
+    public TextArchitect.BuildMethod bm = TextArchitect.BuildMethod.Instant;
 
     private string[] line = new[]
     {
@@ -17,7 +17,7 @@ public class Testing_Architect : BaseBehaviour
     private void Start()
     {
         _architect = new TextArchitect();
-        _architect.buildMethod = TextArchitect.BuildMethod.fade;
+        _architect.buildMethod = TextArchitect.BuildMethod.Fade;
         _architect.speed = 0.5f;
     }
 

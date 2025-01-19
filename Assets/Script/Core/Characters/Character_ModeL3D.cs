@@ -2,7 +2,7 @@
 
 public class Character_ModeL3D : Character
 {
-    public Character_ModeL3D(string name, CharacterConfigData config, GameObject prefab) : base(name, config, prefab)
+    public Character_ModeL3D(string name, CharacterConfigData config, GameObject prefab, string rootCharacterFolder) : base(name, config, prefab)
     {
     }
 }

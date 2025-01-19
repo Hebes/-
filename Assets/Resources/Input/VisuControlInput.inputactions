@@ -1,0 +1,56 @@
+{
+    "name": "VisuControlInput",
+    "maps": [
+        {
+            "name": "General",
+            "id": "b79b4f68-7034-405f-ab62-36110e27bca3",
+            "actions": [
+                {
+                    "name": "Next",
+                    "type": "Button",
+                    "id": "b8bdcd26-2094-404f-9f46-73be2cb86970",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "04797af1-9b24-410a-b846-89f00bb45986",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d5500c9-d817-48fc-ab63-eb3c52389b9b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "33273b3e-7463-439c-b980-bff0dd5ca143",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

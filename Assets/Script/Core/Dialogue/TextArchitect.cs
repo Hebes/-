@@ -12,24 +12,20 @@ using UnityEngine;
 /// </summary>
 public class TextArchitect
 {
-    private TextMeshProUGUI tmpro_ui => DialogueContainer.I.DialohueText;
+    private float speedMultiplier = 1;
+    private const float baseSpeed = 1;
+    private int characterMultiplier = 1;
+    public bool hurryUp = false; // 是否加快
+
+    public string targetText = "";
+    public string preText = "";
+    private int preTextLength = 0;
+
+    private TextMeshProUGUI tmpro_ui => R.UISystem.UIDialogue.dialogueText;
     private TextMeshPro tmpro_world;
     public TMP_Text tmpro => tmpro_ui != null ? tmpro_ui : tmpro_world;
-
     public string currentText => tmpro.text;
-    public string targetText { get; private set; } = "";
-    public string preText { get; private set; } = "";
-    private int preTextLength = 0;
     public string fullTargetText => preText + targetText;
-
-    public enum BuildMethod
-    {
-        instant,
-        typewriter,
-        fade
-    }
-
-    public BuildMethod buildMethod = BuildMethod.typewriter;
 
     public Color textColor
     {
@@ -43,17 +39,28 @@ public class TextArchitect
         set => speedMultiplier = value;
     }
 
-    private float speedMultiplier = 1;
-    private const float baseSpeed = 1;
+    public enum BuildMethod
+    {
+        /// <summary>
+        /// 立刻显示
+        /// </summary>
+        Instant,
 
-    private int characterMultiplier = 1;
+        /// <summary>
+        /// 打字机
+        /// </summary>
+        TypeWriter,
 
-    /// <summary>
-    /// 是否加快
-    /// </summary>
-    public bool hurryUp = false;
+        /// <summary>
+        /// 逐渐显示
+        /// </summary>
+        Fade,
+    }
+
+    public BuildMethod buildMethod = R.DialogueSystem.Config.buildMethod; //BuildMethod.TypeWriter;//
 
     public int CharactersPerCycle => speed <= 2f ? characterMultiplier : speed <= 2.5f ? characterMultiplier * 2 : characterMultiplier * 3;
+
 
     public Coroutine Build(string text)
     {
@@ -95,12 +102,12 @@ public class TextArchitect
         Prepare();
         switch (buildMethod)
         {
-            case BuildMethod.instant:
+            case BuildMethod.Instant:
                 break;
-            case BuildMethod.typewriter:
+            case BuildMethod.TypeWriter:
                 yield return Build_Typewriter();
                 break;
-            case BuildMethod.fade:
+            case BuildMethod.Fade:
                 yield return Build_Fade();
                 break;
             default:
@@ -126,12 +133,12 @@ public class TextArchitect
     {
         switch (buildMethod)
         {
-            case BuildMethod.instant:
+            case BuildMethod.Instant:
                 break;
-            case BuildMethod.typewriter:
+            case BuildMethod.TypeWriter:
                 tmpro.maxVisibleCharacters = tmpro.textInfo.characterCount;
                 break;
-            case BuildMethod.fade:
+            case BuildMethod.Fade:
                 tmpro.ForceMeshUpdate();
                 break;
             default:
@@ -140,6 +147,21 @@ public class TextArchitect
 
         Stop();
         OnComplete();
+    }
+    
+    /// <summary>
+    /// 立即将文本应用到对象
+    /// </summary>
+    /// <param name="text"></param>
+    public void SetText(string text)
+    {
+        preText = "";
+        targetText = text;
+
+        Stop();
+
+        tmpro.text = targetText;
+        //builder.ForceComplete();
     }
 
     /// <summary>
@@ -200,13 +222,13 @@ public class TextArchitect
     {
         switch (buildMethod)
         {
-            case BuildMethod.instant:
+            case BuildMethod.Instant:
                 Prepare_Instant();
                 break;
-            case BuildMethod.typewriter:
+            case BuildMethod.TypeWriter:
                 Prepare_Typewriter();
                 break;
-            case BuildMethod.fade:
+            case BuildMethod.Fade:
                 Prepare_Fade();
                 break;
             default:
