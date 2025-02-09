@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4255c29ea04c4e1189600d79813017b5, type: 3}
+  m_Name: "\u89D2\u8272\u914D\u7F6E"
+  m_EditorClassIdentifier: 
+  characterArray:
+  - name: Haruka
+    alias: h
+    prefab: {fileID: 8638271997196409906, guid: ec9bf46ea52544b47b81d231c178d106, type: 3}
+    characterType: 1
+    nameColor: {r: 1, g: 1, b: 1, a: 1}
+    dialogueColor: {r: 1, g: 1, b: 1, a: 1}
+    nameFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    dialogueFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
+    spriteList:
+    - name: cry
+      sprite: {fileID: 21300000, guid: 231d76af1c9e050479add51ced008308, type: 3}
+    - name: laugh
+      sprite: {fileID: 21300000, guid: 432bbfc3c182cd74b8101cd4722c7831, type: 3}
+    - name: laughblush
+      sprite: {fileID: 21300000, guid: e1b2b4d89645d9344a95ad50b3e872c6, type: 3}
+    - name: mad
+      sprite: {fileID: 21300000, guid: 063c1cca9bd27ca419787812c65316c8, type: 3}
+    - name: mad_blink
+      sprite: {fileID: 21300000, guid: ee67a0eb615e42d44ae44884c01848e4, type: 3}
+    - name: neutral
+      sprite: {fileID: 21300000, guid: 3c8a4a0e305b88a428415d474cc43257, type: 3}
+    - name: neutral_blink
+      sprite: {fileID: 21300000, guid: 1ce39f3de4a63e34b8c4b2c1ec8ab03a, type: 3}
+    - name: pout
+      sprite: {fileID: 21300000, guid: 5144a21458d542b4389e66e3a430941f, type: 3}
+    - name: pout_blink
+      sprite: {fileID: 21300000, guid: 645dd91d3cb3dbb42bb3aa42d047aa9b, type: 3}
+    - name: sad
+      sprite: {fileID: 21300000, guid: ff734d03dee48c2488ddb95530d8e293, type: 3}
+    - name: sad_blink
+      sprite: {fileID: 21300000, guid: 1b458e09db2ea124ba72a2b0f5c6cc1a, type: 3}
+    - name: shy
+      sprite: {fileID: 21300000, guid: 07a3962c68ab71548a8c7f0ea569b152, type: 3}
+    - name: shy_blink
+      sprite: {fileID: 21300000, guid: 04aae3a201f366d449b6354a48e39c12, type: 3}
+    - name: sigh
+      sprite: {fileID: 21300000, guid: 4de2e91b071aef74ca27cd840ba4ea0d, type: 3}
+    - name: sighblush
+      sprite: {fileID: 21300000, guid: eace33a9db6cf2340abef4c6f8dd493d, type: 3}
+    - name: smile
+      sprite: {fileID: 21300000, guid: 95b2b1aef8f368440afece33f9be56d0, type: 3}
+    - name: smileblush
+      sprite: {fileID: 21300000, guid: a885d627302473d4ea9fd2f84587a529, type: 3}
+    - name: smileblush_blink
+      sprite: {fileID: 21300000, guid: 257f139b3715df7468ed9858fa4a8b40, type: 3}
+    - name: smile_blink
+      sprite: {fileID: 21300000, guid: d3ab1001b3c60f946bdffb0e571d3fba, type: 3}
+  - name: Generic
+    alias: gen
+    prefab: {fileID: 5155003678342690293, guid: adef569bee20a1743a05eea0a98443fa, type: 3}
+    characterType: 2
+    nameColor: {r: 0, g: 0.33849382, b: 1, a: 1}
+    dialogueColor: {r: 1, g: 1, b: 1, a: 1}
+    nameFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    dialogueFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
+    spriteList:
+    - name: Generic5
+      sprite: {fileID: -1957405950, guid: 6c007007286b401479daf6bba1200421, type: 3}
+    - name: Generic1
+      sprite: {fileID: 868266631, guid: 6c007007286b401479daf6bba1200421, type: 3}
+    - name: Generic2
+      sprite: {fileID: 2058288508, guid: 6c007007286b401479daf6bba1200421, type: 3}
+    - name: Generic3
+      sprite: {fileID: 1080889024, guid: 6c007007286b401479daf6bba1200421, type: 3}
+    - name: Generic4
+      sprite: {fileID: -964242304, guid: 6c007007286b401479daf6bba1200421, type: 3}
+  - name: Femaie Student 2
+    alias: fs2
+    prefab: {fileID: 2298290366866924864, guid: 5baaf8ed1ded15a4982389b6a9bad9e7, type: 3}
+    characterType: 1
+    nameColor: {r: 0.2264151, g: 0.08009968, b: 0.08009968, a: 1}
+    dialogueColor: {r: 1, g: 1, b: 1, a: 1}
+    nameFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    dialogueFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
+    spriteList:
+    - name: female student 2 - blush
+      sprite: {fileID: 21300000, guid: fb8ffcc53d5fdf7478c76d005391bef2, type: 3}
+    - name: female student 2 - happy
+      sprite: {fileID: 21300000, guid: df280f1f06751d94eab80822a9a78e3d, type: 3}
+    - name: female student 2 - sad
+      sprite: {fileID: 21300000, guid: a87d3431b34b5024e84ff21358b4fbd6, type: 3}
+    - name: female student 2 - surprised
+      sprite: {fileID: 21300000, guid: c76866b235f5a6d439dc6ef13d8e4ee4, type: 3}
+    - name: female student 2 - upset
+      sprite: {fileID: 21300000, guid: 32dd9e88cd28cb145bbd0a11e0fa4e4b, type: 3}
+  - name: Raelin
+    alias: r
+    prefab: {fileID: 5826939106795368754, guid: 6ce7be681f1e4fe4a9b46b9ded5d0cd6, type: 3}
+    characterType: 2
+    nameColor: {r: 0.2264151, g: 0.08009968, b: 0.08009968, a: 1}
+    dialogueColor: {r: 1, g: 1, b: 1, a: 1}
+    nameFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    dialogueFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
+    spriteList:
+    - name: A1
+      sprite: {fileID: -539901293, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A2
+      sprite: {fileID: 371039983, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Blush
+      sprite: {fileID: -231494423, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Default
+      sprite: {fileID: -831843799, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Embarrassed
+      sprite: {fileID: -12134526, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Guilty
+      sprite: {fileID: 1799884572, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Happy
+      sprite: {fileID: -861763730, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Laugh
+      sprite: {fileID: 752875108, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Scared
+      sprite: {fileID: 1148731873, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Scold
+      sprite: {fileID: 877658820, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Shocked
+      sprite: {fileID: -819501888, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: A_Stern
+      sprite: {fileID: 1930344441, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B1
+      sprite: {fileID: 2143271235, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B2
+      sprite: {fileID: -984643779, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Blush
+      sprite: {fileID: 455040721, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Default
+      sprite: {fileID: 2079976379, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Embarrassed
+      sprite: {fileID: -899087398, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Guilty
+      sprite: {fileID: -1818594040, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Happy
+      sprite: {fileID: 1731016576, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Laugh
+      sprite: {fileID: -810301392, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Scared
+      sprite: {fileID: 2089198746, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Scold
+      sprite: {fileID: 1533307292, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Shocked
+      sprite: {fileID: -1330446141, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+    - name: B_Stern
+      sprite: {fileID: -1720575887, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}

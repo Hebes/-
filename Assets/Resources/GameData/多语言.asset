@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e35ec134ad48f4f8a22ca9bd2d87a2, type: 3}
+  m_Name: "\u591A\u8BED\u8A00"
+  m_EditorClassIdentifier: 
+  LanguageList:
+  - key: Empty Slot
+    chinese: Empty Slot
+    engilsh: Empty Slot
+  - key: "\u4E3B\u754C\u9762"
+    chinese: "\u4E3B\u754C\u9762"
+    engilsh: "\u4E3B\u754C\u9762"
+  - key: "\u5FEB\u901F"
+    chinese: "\u5FEB\u901F"
+    engilsh: "\u5FEB\u901F"
+  - key: "\u9009\u62E9\u540E\u8DF3\u8FC7\u884C\u4E3A"
+    chinese: "\u9009\u62E9\u540E\u8DF3\u8FC7\u884C\u4E3A"
+    engilsh: "\u9009\u62E9\u540E\u8DF3\u8FC7\u884C\u4E3A"
+  - key: "\u5E2E\u52A9"
+    chinese: "\u5E2E\u52A9"
+    engilsh: "\u5E2E\u52A9"
+  - key: "\u5206\u8FA8\u7387"
+    chinese: "\u5206\u8FA8\u7387"
+    engilsh: "\u5206\u8FA8\u7387"
+  - key: "\u52A0\u8F7D"
+    chinese: "\u52A0\u8F7D"
+    engilsh: "\u52A0\u8F7D"
+  - key: "\u7F13\u6162"
+    chinese: "\u7F13\u6162"
+    engilsh: "\u7F13\u6162"
+  - key: "\u4FDD\u5B58"
+    chinese: "\u4FDD\u5B58"
+    engilsh: "\u4FDD\u5B58"
+  - key: "\u81EA\u52A8\u9605\u8BFB\u901F\u5EA6"
+    chinese: "\u81EA\u52A8\u9605\u8BFB\u901F\u5EA6"
+    engilsh: "\u81EA\u52A8\u9605\u8BFB\u901F\u5EA6"
+  - key: "\u6587\u672C\u901F\u5EA6"
+    chinese: "\u6587\u672C\u901F\u5EA6"
+    engilsh: "\u6587\u672C\u901F\u5EA6"
+  - key: "\u97F3\u4E50\u8BBE\u7F6E"
+    chinese: "\u97F3\u4E50\u8BBE\u7F6E"
+    engilsh: "\u97F3\u4E50\u8BBE\u7F6E"
+  - key: "\u663E\u793A"
+    chinese: "\u663E\u793A"
+    engilsh: "\u663E\u793A"
+  - key: "\u5168\u5C4F"
+    chinese: "\u5168\u5C4F"
+    engilsh: "\u5168\u5C4F"
+  - key: "\u97F3\u4E50"
+    chinese: "\u97F3\u4E50"
+    engilsh: "\u97F3\u4E50"
+  - key: "\u901A\u7528\u8BBE\u7F6E"
+    chinese: "\u901A\u7528\u8BBE\u7F6E"
+    engilsh: "\u901A\u7528\u8BBE\u7F6E"
+  - key: "\u505C\u6B62\u8DF3\u8FC7"
+    chinese: "\u505C\u6B62\u8DF3\u8FC7"
+    engilsh: "\u505C\u6B62\u8DF3\u8FC7"
+  - key: 1920*1080
+    chinese: 1920*1080
+    engilsh: 1920*1080
+  - key: "\u6587\u4EF6\u83DC\u5355"
+    chinese: "\u6587\u4EF6\u83DC\u5355"
+    engilsh: "\u6587\u4EF6\u83DC\u5355"
+  - key: "\u9000\u51FA"
+    chinese: "\u9000\u51FA"
+    engilsh: "\u9000\u51FA"
+  - key: "\u8FD4\u56DE"
+    chinese: "\u8FD4\u56DE"
+    engilsh: "\u8FD4\u56DE"
+  - key: "\u6301\u7EED\u8DF3\u8FC7"
+    chinese: "\u6301\u7EED\u8DF3\u8FC7"
+    engilsh: "\u6301\u7EED\u8DF3\u8FC7"
+  - key: "\u8BBE\u7F6E"
+    chinese: "\u8BBE\u7F6E"
+    engilsh: "\u8BBE\u7F6E"
+  - key: "\u5220\u9664"
+    chinese: "\u5220\u9664"
+    engilsh: "\u5220\u9664"
+  - key: "\u63A7\u5236\u5728\u8FD9\u91CC"
+    chinese: "\u63A7\u5236\u5728\u8FD9\u91CC"
+    engilsh: "\u63A7\u5236\u5728\u8FD9\u91CC"
+  - key: "\u901A\u7528"
+    chinese: "\u901A\u7528"
+    engilsh: "\u901A\u7528"
+  - key: "\u7A97\u53E3"
+    chinese: "\u7A97\u53E3"
+    engilsh: "\u7A97\u53E3"
+  - key: 1
+    chinese: 1
+    engilsh: 1
+  - key: Option A
+    chinese: Option A
+    engilsh: Option A
+  - key: "\u662F"
+    chinese: "\u662F"
+    engilsh: "\u662F"
+  - key: "\u5426"
+    chinese: "\u5426"
+    engilsh: "\u5426"
+  - key: "\u662F\u5426\u5F00\u59CB\u65B0\u6E38\u620F?"
+    chinese: "\u662F\u5426\u5F00\u59CB\u65B0\u6E38\u620F?"
+    engilsh: "\u662F\u5426\u5F00\u59CB\u65B0\u6E38\u620F?"
+  - key: "\u63A5\u53D7"
+    chinese: "\u63A5\u53D7"
+    engilsh: "\u63A5\u53D7"
+  - key: "\u4E3B\u76EE\u5F55"
+    chinese: "\u4E3B\u76EE\u5F55"
+    engilsh: "\u4E3B\u76EE\u5F55"
+  - key: Enter text...
+    chinese: Enter text...
+    engilsh: Enter text...
+  - key: "\u6807\u9898"
+    chinese: "\u6807\u9898"
+    engilsh: "\u6807\u9898"
+  - key: 
+    chinese: 
+    engilsh: 
+  - key: "\u81EA\u52A8"
+    chinese: "\u81EA\u52A8"
+    engilsh: "\u81EA\u52A8"
+  - key: HISTORY LOGS
+    chinese: HISTORY LOGS
+    engilsh: HISTORY LOGS
+  - key: Button
+    chinese: Button
+    engilsh: Button
+  - key: "\u8DF3\u8FC7"
+    chinese: "\u8DF3\u8FC7"
+    engilsh: "\u8DF3\u8FC7"
+  - key: "\u200B"
+    chinese: "\u200B"
+    engilsh: "\u200B"
