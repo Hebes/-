@@ -44,11 +44,11 @@ public class LL_Choice : ILogicalLine
         R.DialogueSystem.ConversationManager.EnqueuePriority(newConversation);
 
         AutoReader autoReader = R.DialogueSystem.autoReader;
-        // if (autoReader != null && autoReader.IsOn && autoReader.Skip)
-        // {
-        //     if (VN_Configuration.activeConfig != null && !VN_Configuration.activeConfig.continueSkippingAfterChoice)
-        //         autoReader.Disable();
-        // }
+        if (autoReader != null && autoReader.IsOn && autoReader.Skip)
+        {
+            if (VN_Configuration.activeConfig != null && !VN_Configuration.activeConfig.continueSkippingAfterChoice)
+                autoReader.Disable();
+        }
     }
 
     public bool Matches(DIALOGUE_LINE line)

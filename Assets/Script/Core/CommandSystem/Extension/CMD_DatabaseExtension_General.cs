@@ -18,7 +18,7 @@ public class CMD_DatabaseExtension_General : CMD_DatabaseExtension
         database.AddCommand("ShowUI", new Func<string[], IEnumerator>(ShowDialogueSystem));
         database.AddCommand("HideUI", new Func<string[], IEnumerator>(HideDialogueSystem));
 
-        //Dialogue Controls
+        //对话控制
         database.AddCommand("ShowDB", new Func<string[], IEnumerator>(ShowDialogueBox));
         database.AddCommand("HideDB", new Func<string[], IEnumerator>(HideDialogueBox));
 

@@ -11,8 +11,8 @@ public class AutoReader : BaseBehaviour
     private const float READ_TIME_PADDING = 0.5f;
     private const float MAX_READ_TIME = 99f; //最大读取时间
     private const float MIN_READ_TIME = 1f; //最小读取时间
-    private const string STATUS_TEXT_AUTO = "Auto"; //状态文本自动
-    private const string STATUS_TEXT_SKIP = "Skipping"; //状态文本跳过
+    private const string STATUS_TEXT_AUTO = "自动"; //状态文本自动
+    private const string STATUS_TEXT_SKIP = "跳过中..."; //状态文本跳过
 
     public bool Skip { get; set; } = false;
 
@@ -20,7 +20,7 @@ public class AutoReader : BaseBehaviour
 
     public bool IsOn => co_running != null;
     public Coroutine co_running;
-    private TextMeshProUGUI StatusText => R.UISystem.UIDialogue.autoReadStatus;
+    private TextMeshProUGUI StatusText => R.DialogueSystem.dialogueContainer.uiDialogue.autoReadStatus;
     [HideInInspector] public bool allowToggle = true;
 
     public void Initialize()
@@ -58,7 +58,7 @@ public class AutoReader : BaseBehaviour
             yield break;
         }
 
-        if (!architect.isBuilding && architect.currentText != string.Empty)
+        if (!architect.isBuilding && architect.ShowText.text.IsNoNullOrNoEmpty())
             R.DialogueSystem.OnSystemPrompt_Next();
 
         while (conversationManager.isRunning)
@@ -76,11 +76,11 @@ public class AutoReader : BaseBehaviour
                 while (architect.isBuilding || conversationManager.IsWaitingOnAutoTimer)
                     yield return null;
 
-                float timeToRead = Mathf.Clamp(((float)architect.tmpro.textInfo.characterCount / DEFAULT_CHARACTERS_READ_PER_SECOND), MIN_READ_TIME, MAX_READ_TIME);
+                float timeToRead = Mathf.Clamp(((float)architect.ShowText.textInfo.characterCount / DEFAULT_CHARACTERS_READ_PER_SECOND), MIN_READ_TIME, MAX_READ_TIME);
                 timeToRead = Mathf.Clamp((timeToRead - (Time.time - timeStarted)), MIN_READ_TIME, MAX_READ_TIME);
                 timeToRead = (timeToRead / Speed) + READ_TIME_PADDING;
-
-                $"等待 [{timeToRead}秒] 在 '{architect.currentText}'".Log();
+ 
+                $"等待 [{timeToRead}秒] 在 '{architect.ShowText.text}'".Log();
 
                 yield return new WaitForSeconds(timeToRead);
             }
@@ -89,7 +89,7 @@ public class AutoReader : BaseBehaviour
                 architect.ForceComplete();
                 yield return new WaitForSeconds(0.05f);
             }
- 
+
             R.DialogueSystem.OnSystemPrompt_Next();
         }
 

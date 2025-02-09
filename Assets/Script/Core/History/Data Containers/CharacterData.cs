@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static CharacterData.AnimationData;
 
-
+/// <summary>
+/// 角色数据
+/// </summary>
 [System.Serializable]
 public class CharacterData
 {
@@ -20,6 +22,9 @@ public class CharacterData
     public string animationJSON;
     public string dataJSON;
 
+    /// <summary>
+    /// 角色配置缓存
+    /// </summary>
     [System.Serializable]
     public class CharacterConfigCache
     {
@@ -173,17 +178,15 @@ public class CharacterData
 
                     break;
                 case Character.CharacterType.Live2D:
-                   
                     break;
                 case Character.CharacterType.Model3D:
-                   
                     break;
             }
 
             cache.Add(character.Name);
         }
 
-        foreach (Character character in  R .CharacterSystem.allCharacters)
+        foreach (Character character in R.CharacterSystem.allCharacters)
         {
             if (!cache.Contains(character.Name))
                 character.isVisible = false;

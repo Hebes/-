@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 多语言系统
@@ -17,25 +18,22 @@ public class LanguageSysatem : SM<LanguageSysatem>
         English,
     }
 
-    public string GetLanguage(string key)
+    public string Get(string key)
     {
         foreach (LanguageData languageData in LanguageList)
         {
             if (languageData.key.Equals(key) ||
-                languageData.Engilsh.Equals(key))
+                languageData.engilsh.Equals(key))
             {
                 switch (languageType)
                 {
-                    case LanguageType.Chinese: return languageData.Chinese;
-                    case LanguageType.English: return languageData.Engilsh;
+                    case LanguageType.Chinese: return languageData.chinese;
+                    case LanguageType.English: return languageData.engilsh;
                 }
             }
         }
 
-        $"未配置多语言{key}".LogWarning();
-        LanguageData languageDataTemp = new LanguageData() { key = key, Chinese = key, Engilsh = key, };
-        DB.I.LanguageSo.LanguageList.Add(languageDataTemp);
-        return key;
+        return RecordUnNoLanguage(key).key;
     }
 
     public static LanguageData GetLanguageData(string key)
@@ -43,16 +41,13 @@ public class LanguageSysatem : SM<LanguageSysatem>
         foreach (LanguageData languageData in I.LanguageList)
         {
             if (languageData.key.Equals(key) ||
-                languageData.Engilsh.Equals(key))
+                languageData.engilsh.Equals(key))
             {
                 return languageData;
             }
         }
 
-        $"未配置多语言{key}".LogWarning();
-        LanguageData languageDataTemp = new LanguageData() { key = key, Chinese = key, Engilsh = key, };
-        DB.I.LanguageSo.LanguageList.Add(languageDataTemp);
-        return languageDataTemp;
+        return RecordUnNoLanguage(key);
     }
 
     public void OnChangeLanguage(LanguageType languageMode)
@@ -67,12 +62,23 @@ public class LanguageSysatem : SM<LanguageSysatem>
         if (!I._languageComponentList.Contains(languageComponent))
             I._languageComponentList.Add(languageComponent);
     }
+
+    /// <summary>
+    /// 记录为止多语言
+    /// </summary>
+    private static LanguageData RecordUnNoLanguage(string key)
+    {
+        LanguageData languageDataTemp = new LanguageData() { key = key, chinese = key, engilsh = key, };
+        DB.I.LanguageSo.LanguageList.Add(languageDataTemp);
+        $"未配置多语言:{key},但是添加到了SO中，请配置".LogWarning();
+        return languageDataTemp;
+    }
 }
 
 [System.Serializable]
 public class LanguageData
 {
-    public string key;
-    public string Chinese;
-    public string Engilsh;
+    public string key = String.Empty;
+    public string chinese = String.Empty;
+    public string engilsh = String.Empty;
 }

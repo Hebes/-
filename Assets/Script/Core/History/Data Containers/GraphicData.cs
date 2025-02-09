@@ -2,13 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-
+/// <summary>
+/// 图形数据
+/// </summary>
 [System.Serializable]
 public class GraphicData
 {
     public string panelName;
     public List<LayerData> layers;
 
+    /// <summary>
+    /// 层级数据
+    /// </summary>
     [System.Serializable]
     public class LayerData
     {

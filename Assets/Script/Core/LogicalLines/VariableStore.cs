@@ -76,6 +76,15 @@ public class VariableStore
         return databases[name];
     }
 
+    /// <summary>
+    /// 创建变量
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="defaultValue"></param>
+    /// <param name="getter"></param>
+    /// <param name="setter"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static bool CreateVariable<T>(string name, T defaultValue, Func<T> getter = null, Action<T> setter = null)
     {
         (string[] parts, Database db, string variableName) = ExtractInfo(name);

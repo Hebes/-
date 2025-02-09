@@ -50,7 +50,7 @@ public class CharacterSpriteLayer
 
     private Image CreateRenderer(Transform parent)
     {
-        Image newRenderer = Object.Instantiate(renderer, parent);
+        Image newRenderer = renderer.Instantiate(parent);
         oldRenderers.Add(rendererCG);
         newRenderer.name = renderer.name;
         renderer = newRenderer;

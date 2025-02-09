@@ -163,3 +163,48 @@ MonoBehaviour:
       sprite: {fileID: -1330446141, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
     - name: B_Stern
       sprite: {fileID: -1720575887, guid: a4c73e24ac31fac44b291ce6e4cd9fe8, type: 3}
+  - name: Shiina
+    alias: S
+    prefab: {fileID: 8638271997196409906, guid: 66090cfdb323e1b4994ca7cf0c3eee68, type: 3}
+    characterType: 1
+    nameColor: {r: 0.2264151, g: 0.08009968, b: 0.08009968, a: 1}
+    dialogueColor: {r: 1, g: 1, b: 1, a: 1}
+    nameFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    dialogueFont: {fileID: 11400000, guid: d10c497e7c22f604791619979daf6202, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
+    spriteList:
+    - name: frown
+      sprite: {fileID: 21300000, guid: 06163b26ab9436b4980d3b3f9680fdcc, type: 3}
+    - name: frown_blink
+      sprite: {fileID: 21300000, guid: aec9b428804c27d408988c601ca4acc8, type: 3}
+    - name: laugh
+      sprite: {fileID: 21300000, guid: 6c9dcb5771841364a8d6843ab5e2abae, type: 3}
+    - name: neutral
+      sprite: {fileID: 21300000, guid: 36e02a1df779cb84284ac4d2a6e7195f, type: 3}
+    - name: neutral_blink
+      sprite: {fileID: 21300000, guid: d51fc685e4452854ba7e85c704820b4e, type: 3}
+    - name: pout
+      sprite: {fileID: 21300000, guid: 2f74bff6db7408242b5ee6972d21d2df, type: 3}
+    - name: pout_blink
+      sprite: {fileID: 21300000, guid: e3750c2cf012fe84ba1f6dab784fa272, type: 3}
+    - name: sad
+      sprite: {fileID: 21300000, guid: 78ef869ff082ef34082f02a0d5c79bee, type: 3}
+    - name: sad_blink
+      sprite: {fileID: 21300000, guid: ce799a5b90d64bc44856c624f095e6c9, type: 3}
+    - name: shock
+      sprite: {fileID: 21300000, guid: 89f602c517d08294881ac656cbe5ad5b, type: 3}
+    - name: shock_blink
+      sprite: {fileID: 21300000, guid: 5421554359749b74f81299a8a8e4886b, type: 3}
+    - name: shy
+      sprite: {fileID: 21300000, guid: d395707fbbcc6b743b77e3e9993e5d14, type: 3}
+    - name: shy_blink
+      sprite: {fileID: 21300000, guid: 17562b6cc914a5d48ae8e0af9868e2bb, type: 3}
+    - name: sigh
+      sprite: {fileID: 21300000, guid: cc0d944db4d032649ae1cb8799896cc5, type: 3}
+    - name: sighblush
+      sprite: {fileID: 21300000, guid: 17d229cb564d78b4db5d5387fb32f694, type: 3}
+    - name: smile
+      sprite: {fileID: 21300000, guid: 3be19728426915148b5b3f877561237c, type: 3}
+    - name: smile_blink
+      sprite: {fileID: 21300000, guid: dcb71bbb8c0f71e40a795f631a084ecd, type: 3}

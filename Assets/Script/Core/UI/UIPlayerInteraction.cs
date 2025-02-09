@@ -5,8 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 控制器
 /// </summary>
-[NoDontDestroyOnLoad]
-public class UIPlayerInteraction : SM<UIPlayerInteraction>,IUIBehaviour
+public class UIPlayerInteraction : BaseBehaviour
 {
     [SerializeField] private Button Auto;
     [SerializeField] private Button Skip;
@@ -14,8 +13,9 @@ public class UIPlayerInteraction : SM<UIPlayerInteraction>,IUIBehaviour
     [SerializeField] private Button Load;
     [SerializeField] private Button config;
     [SerializeField] private Button button;
+    [SerializeField] private Button home;
 
-    public void OnGetComponent()
+    private void Awake()
     {
         Auto = transform.Find("Panel/Auto").GetComponent<UnityEngine.UI.Button>();
         Skip = transform.Find("Panel/Skip").GetComponent<UnityEngine.UI.Button>();
@@ -23,12 +23,18 @@ public class UIPlayerInteraction : SM<UIPlayerInteraction>,IUIBehaviour
         Load = transform.Find("Panel/Load").GetComponent<UnityEngine.UI.Button>();
         config = transform.Find("Panel/Config").GetComponent<UnityEngine.UI.Button>();
         button = transform.Find("Button").GetComponent<UnityEngine.UI.Button>();
+        home = transform.FindComponentByName<UnityEngine.UI.Button>("Home");
     }
 
-    public void OnListener()
+    private void Start()
     {
         button.onClick.AddListener(R.DialogueSystem.OnUserPrompt_Next);
         Auto.onClick.AddListener(R.DialogueSystem.autoReader.Toggle_Auto);
         Skip.onClick.AddListener(R.DialogueSystem.autoReader.Toggle_Skip);
+
+        Save.onClick.AddListener(R.VNMenuSystem.OpenSavePage);
+        Load.onClick.AddListener(R.VNMenuSystem.OpenLoadPage);
+        config.onClick.AddListener(R.VNMenuSystem.OpenConfigPage);
+        home.onClick.AddListener(R.VNMenuSystem.Click_Home);
     }
 }

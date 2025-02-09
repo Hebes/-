@@ -1,6 +1,7 @@
 ﻿/// <summary>
 /// 玩家输入系统
 /// </summary>
+[NoDontDestroyOnLoad]
 public class InputPanelSystem : SM<InputPanelSystem>
 {
 

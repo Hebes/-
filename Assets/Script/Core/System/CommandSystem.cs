@@ -9,6 +9,7 @@ using UnityEngine.Events;
 /// <summary>
 /// 指令管理器
 /// </summary>
+[NoDontDestroyOnLoad]
 public class CommandSystem : SM<CommandSystem>
 {
     private const char SUB_COMMAND_IDENTIFIER = '.';
@@ -27,6 +28,7 @@ public class CommandSystem : SM<CommandSystem>
 
     private void Awake()
     {
+        I = this;
         Assembly assembly = Assembly.GetExecutingAssembly();
         Type[] extensionTypes = assembly.GetTypes().Where(t =>
             t.IsSubclassOf(typeof(CMD_DatabaseExtension))).ToArray();
@@ -64,13 +66,13 @@ public class CommandSystem : SM<CommandSystem>
             }
             else
             {
-                Debug.LogError($"No command called {subCommandName}was found in sub database '{databaseName}'");
+                Debug.LogError($"没有命令调用 {subCommandName}是在子数据库中找到的吗 '{databaseName}'");
                 return null;
             }
         }
 
         string characterName = databaseName;
-        //If we've made it here then we should try to run as a character command
+        //如果我们把它放在这里，那么我们应该尝试作为字符命令运行
         if (R.CharacterSystem.HasCharacter(databaseName))
         {
             List<string> newArgs = new List<string>(args);
@@ -79,7 +81,7 @@ public class CommandSystem : SM<CommandSystem>
             return ExecuteCharacterCommand(subCommandName, args);
         }
 
-        Debug.LogError($"No sub database called {databaseName} exists Command ‘{subCommandName}’could not be run.");
+        Debug.LogError($"没有子数据库调用 {databaseName} 存在的命令 ‘{subCommandName}’无法运行.");
         return null;
     }
 
@@ -188,6 +190,10 @@ public class CommandSystem : SM<CommandSystem>
         activeProcesses.Clear();
     }
 
+    /// <summary>
+    /// 向当前进程添加终止操作
+    /// </summary>
+    /// <param name="action"></param>
     public void AddTerminationActionToCurrentProcess(UnityAction action)
     {
         CommandProcess process = topProcess;

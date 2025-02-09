@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 历史状态
+/// 历史状况
 /// </summary>
 [System.Serializable]
 public class HistoryState

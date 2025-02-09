@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 /// <summary>
 /// 角色管理器
 /// </summary>
+[NoDontDestroyOnLoad]
 public class CharacterSystem : SM<CharacterSystem>
 {
     /// <summary>
@@ -14,19 +15,19 @@ public class CharacterSystem : SM<CharacterSystem>
     /// </summary>
     public class CHARACTER_INFO
     {
-        public string Name = string.Empty;
-        public string CastingName = string.Empty;
-        public string RootCharacterFolder = string.Empty;
+        public string Name = string.Empty; //名称
+        public string CastingName = string.Empty; //角色分配名称
+        public string RootCharacterFolder = string.Empty; //文件夹路径
         public CharacterConfigData Config = null;
-        public GameObject Prefab = null;
+        public GameObject Prefab = null; //预制体
     }
 
     public const string CHARACTER_CASTING_ID = " as ";
-    
+
     private readonly Dictionary<string, Character> characterDic = new Dictionary<string, Character>();
 
     public Character[] allCharacters => characterDic.Values.ToArray();
-    
+
     /// <summary>
     /// 创建角色
     /// </summary>
@@ -43,6 +44,11 @@ public class CharacterSystem : SM<CharacterSystem>
 
         CHARACTER_INFO info = GetCharacterInfo(characterName);
         Character character = CreatCharacterFromInfo(info);
+
+        //对于保存文件，我们只能正确地重新创建字符，如果它们记得它们被转换为谁，并且在重新创建时以相同的方式转换。
+        if (info.CastingName != info.Name)
+            character.castingName = info.CastingName;
+
         characterDic.Add(info.Name.ToLower(), character);
         if (revealAfterCreation)
             character.Show();
@@ -57,14 +63,9 @@ public class CharacterSystem : SM<CharacterSystem>
     /// <returns></returns>
     public CharacterConfigData GetCharacterConfig(string characterName, bool getOriginal = false)
     {
-        if (getOriginal)
-        {
-            return R.DialogueSystem.Config.CharacterConfigurationAssetr.GetConfig(characterName);
-        }
-        else
-        {
-            return GetCharacter(characterName)?.Config;
-        }
+        if (getOriginal) return R.CharacterConfigSo.GetConfig(characterName);
+        Character character = GetCharacter(characterName);
+        return character != null ? character.Config : R.CharacterConfigSo.GetConfig(characterName);
     }
 
 
@@ -72,7 +73,7 @@ public class CharacterSystem : SM<CharacterSystem>
     /// 获取角色
     /// </summary>
     /// <param name="characterName"></param>
-    /// <param name="createIfDoesNotExist"></param>
+    /// <param name="createIfDoesNotExist">是否创建如果不存在</param>
     /// <returns></returns>
     public Character GetCharacter(string characterName, bool createIfDoesNotExist = false)
     {
@@ -93,8 +94,9 @@ public class CharacterSystem : SM<CharacterSystem>
         string[] nameData = characterName.Split(ConfigString.CHARACTER_CASTING_ID, System.StringSplitOptions.RemoveEmptyEntries);
         result.Name = nameData[0];
         result.CastingName = nameData.Length > 1 ? nameData[1] : result.Name;
-        result.Config = R.DialogueSystem.Config.CharacterConfigurationAssetr.GetConfig(result.CastingName);
-        result.Prefab = GetPrefabForCharacter(result.CastingName);
+        result.Config = R.CharacterConfigSo.GetConfig(result.CastingName);
+        result.Prefab = result.Config.prefab; // GetPrefabForCharacter(result.CastingName);
+
         result.RootCharacterFolder = FormatCharacterPath(ConfigString.CharacterRootPathFormat, result.CastingName);
         return result;
     }
@@ -102,7 +104,7 @@ public class CharacterSystem : SM<CharacterSystem>
     private GameObject GetPrefabForCharacter(string characterName)
     {
         string path = FormatCharacterPath(ConfigString.CharacterPrefabPathFormat, characterName.Trim());
-        return R.AssetLoadSystem.Load<GameObject>(path);
+        return R.Load<GameObject>(path);
     }
 
     public string FormatCharacterPath(string path, string characterName)

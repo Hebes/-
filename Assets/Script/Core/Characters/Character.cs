@@ -7,12 +7,15 @@ public abstract class Character
 {
     protected Character(string name, CharacterConfigData config, GameObject prefab)
     {
-        DisplayName = Name = name;
+        this.Name = name;
+        DisplayName = name;
         Config = config;
-        if (prefab)
+        if (prefab!= null)
         {
+            // Transform parentPanel = (config.characterType == CharacterType.Live2D ? R.UISystem.UICharacters.characterPanelLive2D : R.UISystem.UICharacters.transform);
+             Transform parentPanel = R.UISystem.UICharacters.transform;
             //这里才Instantiate
-            GameObject go = Object.Instantiate(prefab, (RectTransform)R.UISystem.UICharacters.transform);
+            GameObject go = prefab.Instantiate(parentPanel);
             go.name = R.CharacterSystem.FormatCharacterPath(ConfigString.CharacterPrefabNameFormat, name);
             go.SetActive(true);
             Root = go.transform as RectTransform;
@@ -31,14 +34,14 @@ public abstract class Character
 
     public CharacterConfigData Config;
 
-    public string Name= "";
+    public string Name = "";
     public string displayName = "";
     public string castingName = "";
     public string DisplayName;
     public RectTransform Root;
     public Animator Animator;
     public Vector2 targetPosition { get; private set; }
-    
+
     //Coroutines
     public Coroutine co_revealing;
     public Coroutine co_hiding;
@@ -122,10 +125,12 @@ public abstract class Character
     public virtual void SetPosition(Vector2 position)
     {
         if (Root == null) return;
+        
         (Vector2 minAnchorTarget, Vector2 maxAnchorTarget) = ConvertUITargetPositionToRelativeCharacterAnchorTargets(position);
+        
         Root.anchorMin = minAnchorTarget;
         Root.anchorMax = maxAnchorTarget;
-        
+
         targetPosition = position;
     }
 
@@ -216,8 +221,8 @@ public abstract class Character
 
     public Coroutine Highlight(float speed = 1f, bool immediate = false)
     {
-        if (isHighlighting ||isUnHighlighting)
-             R.StopCoroutine(co_highlighting);
+        if (isHighlighting || isUnHighlighting)
+            R.StopCoroutine(co_highlighting);
         highlighted = true;
         co_highlighting = R.StartCoroutine(Highlighting(speed, immediate));
         return co_highlighting;
@@ -225,7 +230,7 @@ public abstract class Character
 
     public Coroutine UnHighlight(float speed = 1f, bool immediate = false)
     {
-        if (isHighlighting ||isUnHighlighting)
+        if (isHighlighting || isUnHighlighting)
             R.StopCoroutine(co_highlighting);
         highlighted = false;
         co_highlighting = R.StartCoroutine(Highlighting(speed, immediate));

@@ -10,4 +10,6 @@ using UnityEngine;
         public TextMeshProUGUI dialogueText;
         public float nameFontSize = 0;
         public float dialogueFontSize = 0;
+        
+        
 }

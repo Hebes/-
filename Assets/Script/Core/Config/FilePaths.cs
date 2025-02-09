@@ -6,6 +6,9 @@ public class FilePaths
 
     public static readonly string root = $"{Application.dataPath}/Resources/GameData/";
 
+    //Runtime Paths
+    public static readonly string gameSaves = $"{runtimePath}Save Files/";
+
     //Resources Paths
     public static readonly string resources_font = "Fonts/";
 
@@ -29,5 +32,17 @@ public class FilePaths
         if (resourceName.StartsWith(HOME_DIRECTORY_SYMBOL))
             return resourceName.Substring(HOME_DIRECTORY_SYMBOL.Length);
         return defaultPath + resourceName;
+    }
+
+    private static string runtimePath
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return "Assets/appdata/";
+#else
+                 return Application.persistentDataPath + "/appdata/";
+#endif
+        }
     }
 }

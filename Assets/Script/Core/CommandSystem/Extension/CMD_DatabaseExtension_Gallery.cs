@@ -12,10 +12,10 @@ public class CMD_DatabaseExtension_Gallery : CMD_DatabaseExtension
     private static string[] PARAM_IMMEDIATE = new string[] { "-i", "-immediate" };
     private static string[] PARAM_BLENDTEX = new string[] { "-b", "-blend" };
 
-    public static void Extend(CommandDataBase database)
+    public new static void Extend(CommandDataBase database)
     {
-        database.AddCommand("showgalleryimage", new Func<string[], IEnumerator>(ShowGalleryImage));
-        database.AddCommand("hidegalleryimage", new Func<string[], IEnumerator>(HideGalleryImage));
+        database.AddCommand("ShowGalleryImage", new Func<string[], IEnumerator>(ShowGalleryImage));
+        database.AddCommand("HideGalleryImage", new Func<string[], IEnumerator>(HideGalleryImage));
     }
 
     public static IEnumerator HideGalleryImage(string[] data)
@@ -30,18 +30,11 @@ public class CMD_DatabaseExtension_Gallery : CMD_DatabaseExtension
         string blendTexName = "";
         Texture blendTex = null;
 
-        //Now get the parameters
-        var parameters = ConvertDataToParameters(data);
-
-        //Try to get if this is an immediate effect or not
-        parameters.TryGetValue(PARAM_IMMEDIATE, out immediate, defaultValue: false);
-
-        //Try to get the speed of the transition if it is not an immediate effect
+        var parameters = ConvertDataToParameters(data);//得到参数
+        parameters.TryGetValue(PARAM_IMMEDIATE, out immediate, defaultValue: false);//尝试获取值
         if (!immediate)
-            parameters.TryGetValue(PARAM_SPEED, out transitionSpeed, defaultValue: 1);
-
-        //Try to get the blending texture for the media if we are using one.
-        parameters.TryGetValue(PARAM_BLENDTEX, out blendTexName);
+            parameters.TryGetValue(PARAM_SPEED, out transitionSpeed, defaultValue: 1); //获取过度
+        parameters.TryGetValue(PARAM_BLENDTEX, out blendTexName);//获取纹理
 
         if (!immediate && blendTexName != string.Empty)
             blendTex = Resources.Load<Texture>(FilePaths.resources_blendTextures + blendTexName);
@@ -49,7 +42,7 @@ public class CMD_DatabaseExtension_Gallery : CMD_DatabaseExtension
         if (!immediate)
             R.CommandSystem.AddTerminationActionToCurrentProcess(() =>
             {
-                Debug.Log("CLEAR");
+                Debug.Log("清空");
                 graphicLayer.Clear(immediate: true);
             });
 
@@ -71,20 +64,12 @@ public class CMD_DatabaseExtension_Gallery : CMD_DatabaseExtension
         string blendTexName = "";
         Texture blendTex = null;
 
-        //Now get the parameters
+        
         var parameters = ConvertDataToParameters(data);
-
-        //Try to get the graphic
         parameters.TryGetValue(PARAM_MEDIA, out mediaName, defaultValue: "");
-
-        //Try to get if this is an immediate effect or not
         parameters.TryGetValue(PARAM_IMMEDIATE, out immediate, defaultValue: false);
-
-        //Try to get the speed of the transition if it is not an immediate effect
         if (!immediate)
             parameters.TryGetValue(PARAM_SPEED, out transitionSpeed, defaultValue: 1);
-
-        //Try to get the blending texture for the media if we are using one.
         parameters.TryGetValue(PARAM_BLENDTEX, out blendTexName);
 
         string pathToGraphic = FilePaths.resources_gallery + mediaName;
@@ -100,7 +85,6 @@ public class CMD_DatabaseExtension_Gallery : CMD_DatabaseExtension
         if (!immediate && blendTexName != string.Empty)
             blendTex = Resources.Load<Texture>(FilePaths.resources_blendTextures + blendTexName);
 
-        //Lets try to get the layer to apply the media to
         GraphicLayer graphicLayer = R.GraphicPanelSystem.GetPanel("Cinematic").GetLayer(0, createIfDoesNotExist: true);
 
         if (!immediate)

@@ -19,7 +19,7 @@ public class BaseBehaviour : MonoBehaviour
         }
     }
 
-    public new Transform transform
+    public new Transform trtransform
     {
         get
         {

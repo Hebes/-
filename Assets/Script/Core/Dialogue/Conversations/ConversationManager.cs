@@ -23,7 +23,7 @@ public class ConversationManager
     public bool IsOnLogicalLine { get; private set; } = false; //运行在了逻辑行中
     public Conversation conversation => (conversationQueue.IsEmpty() ? null : conversationQueue.top);
     public int conversationProgress => (conversationQueue.IsEmpty() ? -1 : conversationQueue.top.GetProgress());
-    public bool allowUserPrompts = true;
+    public bool AllowUserPrompts = true;
 
     public void Enqueue(Conversation conversation) => conversationQueue.Enqueue(conversation);
     public void EnqueuePriority(Conversation conversation) => conversationQueue.EnqueuePriority(conversation);
@@ -54,6 +54,7 @@ public class ConversationManager
     {
         while (!conversationQueue.IsEmpty())
         {
+           
             Conversation currentConversation = conversation;
             if (currentConversation.HasReachedEnd()) //是否阅读结束
             {
@@ -62,7 +63,7 @@ public class ConversationManager
             }
 
             string rawLine = currentConversation.CurrentLine();
-
+            //$"当前运行解释行内容 {rawLine}".Log();
             //不要显示任何空行或试图在它们上运行任何逻辑。
             if (string.IsNullOrWhiteSpace(rawLine))
             {
@@ -124,13 +125,17 @@ public class ConversationManager
     /// <param name="speakerData"></param>
     private void HandleSpeakerLogic(DL_SPEAKER_DATA speakerData)
     {
+        //是否必须创造角色
         bool characterMustBeCreated = speakerData.MakeCharacterEnter || speakerData.isCastingPosition || speakerData.IsCastingExpressions;
-        Character character = R.CharacterSystem.CreateCharacter(speakerData.name, revealAfterCreation: characterMustBeCreated);
+        Character character = R.CharacterSystem.GetCharacter(speakerData.name, createIfDoesNotExist: characterMustBeCreated);
         if (speakerData.MakeCharacterEnter && !character.isVisible && character.co_revealing.IsNull())
             character.Show();
 
+        //向UI添加角色名称
         string displayName = TagSystem.Inject(speakerData.DisplayName);
-        R.DialogueSystem.ShowSpeakerName(displayName); //向UI添加角色名称
+        R.DialogueSystem.ShowSpeakerName(displayName); 
+        
+        //将说话者数据应用到对话容器中
         R.DialogueSystem.ApplySpeakerDataToDialogueContainer(speakerData.name);
 
         //显示位置
@@ -140,8 +145,15 @@ public class ConversationManager
         //设置优先级
         if (speakerData.IsCastingExpressions)
         {
-            foreach ((int layer, string expression) data in speakerData.CastExpressions)
-                character.OnReceiveCastingExpression(data.layer, data.expression);
+            try
+            {
+                foreach ((int layer, string expression) data in speakerData.CastExpressions)
+                    character.OnReceiveCastingExpression(data.layer, data.expression);
+            }
+            catch (Exception e)
+            {
+               $"请检查角色的表情加载是否正确,当前角色{speakerData.name}".Error();
+            }
         }
     }
 
@@ -152,7 +164,7 @@ public class ConversationManager
 
     private IEnumerator Line_RunCommands(DIALOGUE_LINE line)
     {
-        List<DL_COMMAND_DATA.Command> commands = line.CommandsData.commands;
+        List<DL_COMMAND_DATA.Command> commands = line.CommandsData.Commands;
         foreach (DL_COMMAND_DATA.Command command in commands)
         {
             if (command.WaitForCompletion || "wait".Equals(command.Name))
@@ -191,7 +203,7 @@ public class ConversationManager
             {
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.NONE:
                     break;
-                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.C:
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.C://
                     yield return WaitForUserInput();
                     R.DialogueSystem.OnSystemPrompt_Clear();
                     break;
@@ -254,8 +266,8 @@ public class ConversationManager
         {
             if (_userPrompt)
             {
-                if (!textArchitect.hurryUp) //没有加快的话
-                    textArchitect.hurryUp = true;
+                if (!textArchitect.HurryUp) //没有加快的话
+                    textArchitect.HurryUp = true;
                 else
                     textArchitect.ForceComplete();
                 _userPrompt = false;
@@ -275,4 +287,6 @@ public class ConversationManager
         if (conversation.HasReachedEnd())
             conversationQueue.Dequeue();
     }
+    
+    public Conversation[] GetConversationQueue() => conversationQueue.GetReadOnly();
 }

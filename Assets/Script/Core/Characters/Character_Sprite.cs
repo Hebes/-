@@ -7,26 +7,30 @@ using UnityEngine.UI;
 
 public class Character_Sprite : Character
 {
-    private CanvasGroup rootCG;
     private const string SPRITE_RENDERER_PARENT_NAME = "Renderers";
-    private const string SPRITESHEET_DEFAULT_SHEETNAME = "Generic";
-    private const char SPRITESHEET_TEX_SPRITE_DELIMITTER = '_';
+    private const string SPRITESHEET_DEFAULT_SHEETNAME = "Default";
+    private const char SPRITESHEET_TEX_SPRITE_DELIMITTER =',';// '-';
 
-    public List<CharacterSpriteLayer> Layers = new List<CharacterSpriteLayer>();
-    private string artAssetDir = string.Empty;
+    public readonly List<CharacterSpriteLayer> Layers = new List<CharacterSpriteLayer>();
+    private string _artAssetsDirectory;
+    private CanvasGroup rootCg => Root.gameObject.FindComponent<CanvasGroup>();
 
     public override bool isVisible
     {
-        get => co_revealing.Has() || Mathf.Approximately(rootCG.alpha, 1);
-        set => rootCG.alpha = value ? 1 : 0;
+        get => co_revealing.Has() || Mathf.Approximately(rootCg.alpha, 1);
+        set => rootCg.alpha = value ? 1 : 0;
     }
-
 
     public Character_Sprite(string name, CharacterConfigData config, GameObject prefab, string rootCharacterFolder) : base(name, config, prefab)
     {
-        artAssetDir = rootCharacterFolder + "/Images";
-        rootCG = Root.gameObject.FindComponent<CanvasGroup>();
-        rootCG.alpha = ENABLE_ON_START ? 1 : 0;
+        if (Root == null)
+        {
+            $"正在执行{name},请检查创建的角色".LogError();
+        }
+
+        rootCg.alpha = ENABLE_ON_START ? 1 : 0;
+        _artAssetsDirectory = rootCharacterFolder + "/Images";
+
         GetLayers();
     }
 
@@ -66,31 +70,40 @@ public class Character_Sprite : Character
 
         switch (Config.characterType)
         {
-            case CharacterType.Sprite:
-                return R.AssetLoadSystem.Load<Sprite>($"{artAssetDir}/{spriteName}");
-            case CharacterType.SpriteSheet:
-                string[] data = spriteName.Split(SPRITESHEET_TEX_SPRITE_DELIMITTER);
-                string path = string.Empty;
-                if (data.Length == 2)
-                {
-                    spriteName = data[1];
-                    path = $"{artAssetDir}/{data[0]}";
-                }
-                else
-                {
-                    path = $"{artAssetDir}/{SPRITESHEET_DEFAULT_SHEETNAME}";
-                }
-
-                Sprite[] defSprite = R.AssetLoadSystem.LoadAll<Sprite>(path);
-                if (defSprite.Length == 0)
-                    throw new Exception($"角色名称错误");
-                Sprite tempValue = Array.Find(defSprite, sprite => sprite.name == spriteName);
-                return tempValue;
-
-
             case CharacterType.Text:
             case CharacterType.Live2D:
             case CharacterType.Model3D:
+            case CharacterType.Sprite:
+                return R.Load<Sprite>($"{_artAssetsDirectory}/{spriteName}");
+            case CharacterType.SpriteSheet:
+                string[] data = spriteName.Split(SPRITESHEET_TEX_SPRITE_DELIMITTER);
+                Sprite[] spriteArray = Array.Empty<Sprite>(); 
+                
+                // if (data.Length == 2)
+                // {
+                //     string textureName = data[0];
+                //     spriteName = data[1];
+                //     
+                //     path = $"{_artAssetsDirectory}/{textureName}";
+                // }
+                // else
+                // {
+                //     string   path = $"{_artAssetsDirectory}/{SPRITESHEET_DEFAULT_SHEETNAME}";
+                // }
+
+                string  path = $"{_artAssetsDirectory}/{SPRITESHEET_DEFAULT_SHEETNAME}";
+
+                Sprite[] defSprite = R.LoadAll<Sprite>(path);
+                if (defSprite.Length == 0)
+                    throw new Exception($"角色名称错误");
+                if (data.Length == 2)
+                {
+                    spriteName = data[1];
+                }
+                Sprite tempValue = Array.Find(defSprite, sprite => sprite.name == spriteName);
+                if (tempValue == null)
+                    throw new Exception($"角色表情错误");
+                return tempValue;
             default: throw new Exception("错误类型这个是Sprite脚本");
         }
     }
@@ -112,9 +125,9 @@ public class Character_Sprite : Character
     {
         float targetAlpha = show ? 1f : 0;
 
-        while (!Mathf.Approximately(rootCG.alpha, targetAlpha))
+        while (!Mathf.Approximately(rootCg.alpha, targetAlpha))
         {
-            rootCG.alpha = Mathf.MoveTowards(rootCG.alpha, targetAlpha, 3f * R.DeltaTime * speedMultiplier);
+            rootCg.alpha = Mathf.MoveTowards(rootCg.alpha, targetAlpha, 3f * R.DeltaTime * speedMultiplier);
             yield return null;
         }
 

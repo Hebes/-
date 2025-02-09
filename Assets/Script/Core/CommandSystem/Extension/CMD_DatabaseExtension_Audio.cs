@@ -20,7 +20,7 @@ public class CMD_DatabaseExtension_Audio : CMD_DatabaseExtension
         database.AddCommand("PlaySfx", new Action<string[]>(PlaySFx));
         database.AddCommand("StopSfx", new Action<string>(StopSfx));
 
-        database.AddCommand("PlayVoice", new Action<string[]>(PlayVoice));
+        database.AddCommand("PlayVoice", new Action<string[]>(PlayVoice));//播放语音
         database.AddCommand("StopVoice", new Action<string>(StopVoice));
 
 

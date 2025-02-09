@@ -2,6 +2,9 @@
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// 画廊配置信息
+/// </summary>
 [System.Serializable]
 class GalleryConfig
 {

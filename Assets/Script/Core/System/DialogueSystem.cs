@@ -1,47 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// 对话系统
 /// </summary>
-public class DialogueSystem : SM<DialogueSystem>, IBehaviour
+[NoDontDestroyOnLoad]
+[RequireComponent(typeof(AutoReader))]
+public class DialogueSystem : SM<DialogueSystem>
 {
-    public DialogueSystemConfigurationSO Config => DB.I.DialogueSystemConfigurationSo;
+    public DialogueSystemConfigurationSO Config => DB.I.DSCSO;
     public ConversationManager ConversationManager;
     public TextArchitect TextArchitect; //文本构建
-    public AutoReader autoReader; //自动阅读
+    public AutoReader autoReader=>GetComponent<AutoReader>(); //自动阅读
     public CanvasGroup mainCanvas;
     public CanvasGroupController CgController; //画布组控制
     public DialogueContainer dialogueContainer = new DialogueContainer();
 
     private List<string> _filtrationSpeakerName; // 过滤说话人的名称的列表
     public bool IsRunningConversation => ConversationManager.isRunning;
-    public DialogueContinuePrompt Prompt => R.UISystem.UIDialogue.dialoguePrompt;
+    public DialogueContinuePrompt Prompt => UIDialogue.I.dialoguePrompt;
     public bool IsVisible => CgController.IsVisible;
 
     public delegate void DialogueSystemEvent();
-
     public event DialogueSystemEvent onUserPromptNext;
     public event DialogueSystemEvent onClear;
 
-    public void OnGetComponent()
+    private void Awake()
     {
-        mainCanvas = GameObject.Find("CanvasMain").FindComponent<CanvasGroup>();
-        gameObject.AddComponent<AutoReader>();
-        if (TryGetComponent(out autoReader))
-            autoReader.Initialize();
-    }
-
-    public void OnNewClass()
-    {
+        I = this;
         _filtrationSpeakerName = new List<string>() { "narrator" };
-        TextArchitect = new TextArchitect();
-        ConversationManager = new ConversationManager();
+        
+        mainCanvas = GameObject.Find("CanvasMain").FindComponent<CanvasGroup>();
         CgController = new CanvasGroupController(this, mainCanvas);
+        ConversationManager = new ConversationManager();
+        dialogueContainer.Initialize();
+        
+        TextArchitect = new TextArchitect(dialogueContainer.uiDialogue.dialogueText, Config.buildMethod);
+        
+        autoReader.Initialize();
     }
-
+    
 
     /// <summary>
     /// 将说话者数据应用到对话容器中
@@ -93,7 +91,7 @@ public class DialogueSystem : SM<DialogueSystem>, IBehaviour
     {
         Prompt.Hide();
         autoReader.allowToggle = false;
-        ConversationManager.allowUserPrompts = false;
+        ConversationManager.AllowUserPrompts = false;
 
         if (autoReader.IsOn)
             autoReader.Disable();
@@ -103,7 +101,7 @@ public class DialogueSystem : SM<DialogueSystem>, IBehaviour
     {
         Prompt.Show();
         autoReader.allowToggle = true;
-        ConversationManager.allowUserPrompts = true;
+        ConversationManager.AllowUserPrompts = true;
     }
 
     #endregion
@@ -117,9 +115,9 @@ public class DialogueSystem : SM<DialogueSystem>, IBehaviour
         return ConversationManager.StartConversation(conversation);
     }
 
-    public Coroutine Say(List<string> lines)
+    public Coroutine Say(List<string> lines, string filePath = "")
     {
-        Conversation conversation = new Conversation(lines);
+        Conversation conversation = new Conversation(lines, file: filePath);
         return ConversationManager.StartConversation(conversation);
     }
 
@@ -135,28 +133,17 @@ public class DialogueSystem : SM<DialogueSystem>, IBehaviour
     public Coroutine Show(float speed = 1f, bool immediate = false) => CgController.Show(speed, immediate);
     public Coroutine Hide(float speed = 1f, bool immediate = false) => CgController.Hide(speed, immediate);
 
-
     public void ShowSpeakerName(string speakerName)
     {
-        bool jump = false;
-        foreach (string s in _filtrationSpeakerName)
+        if (speakerName.ToLower() == "narrator")
         {
-            if (s.ToLower().Equals(speakerName.ToLower()))
-            {
-                jump = true;
-                break;
-            }
+            R.UISystem.UIDialogue.Hide();
+            R.UISystem.UIDialogue.NameText.text = "";
         }
-
-        if (jump)
-            HideSpeakerName();
         else
+        {
             R.UISystem.UIDialogue.Show(speakerName);
-    }
-
-    public void HideSpeakerName()
-    {
-        R.UISystem.UIDialogue.Hide();
+        }
     }
 
     #endregion

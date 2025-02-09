@@ -2,43 +2,40 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
 /// 选择面板
 /// </summary>
 [NoDontDestroyOnLoad]
-public class UIChoicePanel : SM<UIChoicePanel>, IUIBehaviour
+public class UIChoicePanel : SM<UIChoicePanel>
 {
-    public void OnGetComponent()
+    private void Awake()
     {
         choicePanel = GetComponent<UnityEngine.CanvasGroup>();
         titleText = transform.Find("LayoutGroup/Title").GetComponent<TMPro.TextMeshProUGUI>();
         buttonLayoutGroup = transform.Find("LayoutGroup").GetComponent<UnityEngine.UI.VerticalLayoutGroup>();
-
         choiceButtonPrefab = transform.Find("LayoutGroup/Button").GetComponent<UnityEngine.Transform>().gameObject;
     }
 
-    public void OnNewClass()
+    private void Start()
     {
-        cg = new CanvasGroupController(this, choicePanel);
-    }
+        cg = new CanvasGroupController(this, choicePanel)
+        {
+            alpha = 0
+        };
 
-    public void OnInitialize()
-    {
-        cg.alpha = 0;
         cg.SetInteractableState(false);
 
         choiceButtonPrefab.SetActive(false); //样品按钮
     }
 
 
-    private const float BUTTON_MIN_WIDTH = 50;//最小宽度
-    private const float BUTTON_MAX_WIDTH = 1000;//最大宽度
-    private const float BUTTON_WIDTH_PADDING = 25;//宽度填充
-    private const float BUTTON_HEIGHT_PER_LINE = 50;//每行按钮高度
-    private const float BUTTON_HEIGHT_PADDING = 20;//按钮高度填充
+    private const float BUTTON_MIN_WIDTH = 50; //最小宽度
+    private const float BUTTON_MAX_WIDTH = 1000; //最大宽度
+    private const float BUTTON_WIDTH_PADDING = 25; //宽度填充
+    private const float BUTTON_HEIGHT_PER_LINE = 50; //每行按钮高度
+    private const float BUTTON_HEIGHT_PADDING = 20; //按钮高度填充
 
     [SerializeField] private CanvasGroup choicePanel;
     [SerializeField] private TextMeshProUGUI titleText;
@@ -63,12 +60,13 @@ public class UIChoicePanel : SM<UIChoicePanel>, IUIBehaviour
         cg.Show();
         cg.SetInteractableState(active: true);
     }
+
     public void Hide()
     {
         cg.Hide();
         cg.SetInteractableState(false);
     }
-    
+
     /// <summary>
     /// 生成选择
     /// </summary>
@@ -87,7 +85,7 @@ public class UIChoicePanel : SM<UIChoicePanel>, IUIBehaviour
             }
             else
             {
-                GameObject newButtonObject = Instantiate(choiceButtonPrefab, buttonLayoutGroup.transform);
+                GameObject newButtonObject = choiceButtonPrefab.Instantiate(buttonLayoutGroup.transform);
                 newButtonObject.SetActive(true);
 
                 Button newButton = newButtonObject.GetComponent<Button>();

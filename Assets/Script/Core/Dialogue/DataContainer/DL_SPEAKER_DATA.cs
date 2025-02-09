@@ -78,21 +78,21 @@ public class DL_SPEAKER_DATA
     public string name;
     public string castName;
     public Vector2 castPosition;
-    public bool isCastingPosition = false;
+    public bool isCastingPosition = false;//是否分配位置
 
     public bool IsCastingName => !castName.IsNullOrEmpty();
     public string DisplayName => IsCastingName ? castName : name;
-    public bool IsCastingExpressions => CastExpressions.Count > 0;
+    public bool IsCastingExpressions => CastExpressions.Count > 0;//是否有角色表情
 
-    public readonly List<(int layer, string expression)> CastExpressions = new List<(int layer, string expression)>();
+    public readonly List<(int layer, string expression)> CastExpressions = new List<(int layer, string expression)>();//发言者表情
     public bool MakeCharacterEnter = false; //角色进入
     private const string NAMECAST_ID = " as ";
     private const string POSITIONCAST_ID = " at ";
     private const string EXPRESSIONCAST_ID = " [";
     private const string ENTER_KEYWORD = "enter ";
     private const char AXISDELIMITER_ID = ':';
-    private const char EXPRESSIONLAYER_JOINER = ',';
-    private const char EXPRESSIONLAYER_DELIMITER = ':';
+    public const char EXPRESSIONLAYER_JOINER = ',';
+    public const char EXPRESSIONLAYER_DELIMITER = ':';
 
     public string RawData { get; private set; }
 

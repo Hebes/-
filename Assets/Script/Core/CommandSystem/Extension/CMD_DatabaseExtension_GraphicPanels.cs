@@ -99,19 +99,12 @@ public class CMD_DatabaseExtension_GraphicPanels : CMD_DatabaseExtension
             yield break;
         }
 
-        //Try to get·the layer to apply this graphic to
-        parameters.TryGetValue(PARAM_LAYER, out layer, defaultValue: 0);
-        //Try to get the graphic
+        parameters.TryGetValue(PARAM_LAYER, out layer, defaultValue: 0);//层级参数
         parameters.TryGetValue(PARAM_MEDIA, out mediaName); //媒体名称
-        //Try·to get·if this is·an immediate effect or·not
         parameters.TryGetValue(PARAM_IMMEDIATE, out immediate, defaultValue: false);
-        //Try to get the speed of the transition if it is not an immediate effect
         if (!immediate) parameters.TryGetValue(PARAM_SPEED, out transitionSpeed, defaultValue: 1);
-        //Try to get the blending texture for the media if·we are using one.
         parameters.TryGetValue(PARAM_BLENDTEX, out blendTexName);
-        //If this is a video,try to get whether we use audio from the video or not
         parameters.TryGetValue(PARAM_USEVIDEOAUDIO, out useAudio, defaultValue: false);
-        //Now·run·the·logic
         pathToGraphic = GetPathToGraphic(FilePaths.resources_backgroundImages, mediaName);
         graphic = R.Load<Texture>(pathToGraphic);
         if (graphic == null)
@@ -122,7 +115,7 @@ public class CMD_DatabaseExtension_GraphicPanels : CMD_DatabaseExtension
 
         if (graphic == null)
         {
-            Debug.LogError($"找不到被调用的媒体文件 {mediaName}在资源目录中. 请指定资源中的完整路径，并确保文件存在!");
+            $"找不到被调用的媒体文件 {mediaName}在资源目录中. 请指定资源中的完整路径 {pathToGraphic} ，并确保文件存在!".LogError();
             yield break;
         }
 
@@ -131,7 +124,7 @@ public class CMD_DatabaseExtension_GraphicPanels : CMD_DatabaseExtension
             blendTex = R.Load<Texture>(FilePaths.resources_blendTextures + blendTexName);
         }
 
-        //Lets·try to get·the-layer to apply the media to
+        //让我们试着找到要应用媒体的层
         GraphicLayer graphicLayer = panel.GetLayer(layer, createIfDoesNotExist: true);
         if (graphic is Texture texture)
             yield return graphicLayer.SetTexture(texture, transitionSpeed, blendTex, pathToGraphic, immediate);

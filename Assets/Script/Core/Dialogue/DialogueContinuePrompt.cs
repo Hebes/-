@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 对话继续提示
@@ -9,29 +10,29 @@ public class DialogueContinuePrompt : BaseBehaviour
 {
     private RectTransform root;
     [SerializeField] private Animator anim;
-    [SerializeField] private TextMeshProUGUI tmpro;
+    [SerializeField] private TextMeshProUGUI tmPro;
     public bool isShowing => anim.gameObject.activeSelf;
 
-    private void Start()
+    private void Awake()
     {
         root = GetComponent<RectTransform>();
         anim = transform.Find("Arrow").GetComponent<UnityEngine.Animator>();
-        tmpro = R.UISystem.UIDialogue.dialogueText;
+        tmPro = R.UITotalRoot.FindComponent<UIDialogue>().dialogueText;
     }
 
     public void Show()
     {
-        if (tmpro.text == String.Empty)
+        if (tmPro.text == String.Empty)
         {
             if (isShowing)
                 Hide();
             return;
         }
 
-        tmpro.ForceMeshUpdate();
+        tmPro.ForceMeshUpdate();
         anim.gameObject.SetActive(true);
-        root.transform.SetParent(tmpro.transform);
-        TMP_CharacterInfo finalCharacter = tmpro.textInfo.characterInfo[tmpro.textInfo.characterCount - 1];
+        root.transform.SetParent(tmPro.transform);
+        TMP_CharacterInfo finalCharacter = tmPro.textInfo.characterInfo[tmPro.textInfo.characterCount - 1];
         Vector3 targetPos = finalCharacter.bottomRight;
         float characterWidth = finalCharacter.pointSize * 0.5f;
         targetPos = new Vector3(targetPos.x + characterWidth, targetPos.y, 0);

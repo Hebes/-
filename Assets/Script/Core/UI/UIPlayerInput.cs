@@ -1,34 +1,29 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 [NoDontDestroyOnLoad]
-public class UIPlayerInput : SM<UIPlayerInput>, IUIBehaviour
+public class UIPlayerInput : SM<UIPlayerInput>
 {
-    public void OnGetComponent()
+    private void Awake()
     {
+        I = this;
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
         titleText = transform.Find("TitleText").GetComponent<TMPro.TextMeshProUGUI>();
         inputField = transform.Find("InputField").GetComponent<TMPro.TMP_InputField>();
         acceptButton = transform.Find("AcceptButton").GetComponent<UnityEngine.UI.Button>();
-    }
-
-    public void OnNewClass()
-    {
+        
         cg = new CanvasGroupController(this, canvasGroup);
-    }
-
-    public void OnListener()
-    {
-        inputField.onValueChanged.AddListener(OnInputChanged);
-        acceptButton.onClick.AddListener(OnAcceptInput);
-    }
-
-    public virtual void OnInitialize()
-    {
         cg.rootCG.alpha = 0;
         cg.SetInteractableState(active: false);
         acceptButton.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        inputField.onValueChanged.AddListener(OnInputChanged);
+        acceptButton.onClick.AddListener(OnAcceptInput);
     }
 
 

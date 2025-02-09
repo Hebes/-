@@ -12,19 +12,23 @@ public class AudioSystem : SM<AudioSystem>
     public AudioMixerGroup sfxMixer;
     public AudioMixerGroup voicesMixer;
     public Dictionary<int, AudioChannel> channels = new Dictionary<int, AudioChannel>();
+    public AnimationCurve audioFalloffCurve;
 
     private Transform sfxRoot;
     public static char[] SFX_NAME_FORMAT_CONTAINERS = new char[] { '[', ']' };
     private const string SFX_NAME_FORMAT = "SFX-[{0}]";
     public const float TRACK_TRANSITION_SPEED = 1f;
-    
+    public const string MUSIC_VOLUME_PARAMETER_NAME = "MusicVolume";
+    public const string SFX_VOLUME_PARAMETER_NAME = "SFXVolume";
+    public const string VOICES_VOLUME_PARAMETER_NAME = "VoicesVolume";
+    public const float MUTED_VOLUME_LEVEL = -80f;
     public AudioSource[] allSFX => sfxRoot.GetComponentsInChildren<AudioSource>();
-    
+
     private void Awake()
     {
         MianAudioMixer = R.Load<AudioMixer>("Audio/Mian");
 
-        var audioMixerGroups = MianAudioMixer.FindMatchingGroups("Master");
+        AudioMixerGroup[] audioMixerGroups = MianAudioMixer.FindMatchingGroups("Master");
         foreach (AudioMixerGroup audioMixerGroup in audioMixerGroups)
         {
             if ("Music".Equals(audioMixerGroup.name))
@@ -43,6 +47,12 @@ public class AudioSystem : SM<AudioSystem>
 
         sfxRoot = new GameObject(musicMixer.name).transform;
         sfxRoot.SetParent(transform);
+
+        audioFalloffCurve = new AnimationCurve();
+        audioFalloffCurve.AddKey(0f, -80f); // 在时间0处，值为0
+        audioFalloffCurve.AddKey(0.2f, -25f); // 在时间0处，值为0
+        audioFalloffCurve.AddKey(0.5f, -10f); // 在时间0处，值为0
+        audioFalloffCurve.AddKey(1f, 0f); // 在时间0处，值为0
     }
 
     public AudioSource PlaySoundEffect(string filePath, AudioMixerGroup mixer = null, float volume = 1, float pitch = 1, bool loop = false)
@@ -119,7 +129,7 @@ public class AudioSystem : SM<AudioSystem>
     }
 
     /// <summary>
-    /// 15.4
+    /// 15.4 播放轨道
     /// </summary>
     /// <param name="clip"></param>
     /// <param name="channel"></param>
@@ -156,6 +166,21 @@ public class AudioSystem : SM<AudioSystem>
         }
     }
 
+    public void StopAllSoundEffects()
+    {
+        AudioSource[] sources = sfxRoot.GetComponentsInChildren<AudioSource>();
+        foreach (var source in sources)
+        {
+            Destroy(source.gameObject);
+        }
+    }
+
+    public void StopAllTracks()
+    {
+        foreach (AudioChannel channel in channels.Values)
+            channel.StopTrack();
+    }
+
     public AudioChannel TryGetChannel(int channelNumber, bool createIfDoesNotExist = false)
     {
         if (channels.TryGetValue(channelNumber, out AudioChannel channel))
@@ -169,7 +194,7 @@ public class AudioSystem : SM<AudioSystem>
 
         return null;
     }
-    
+
     public bool IsPlayingSoundEffect(string soundName)
     {
         soundName = soundName.ToLower();
@@ -182,5 +207,24 @@ public class AudioSystem : SM<AudioSystem>
         }
 
         return false;
+    }
+
+
+    public void SetMusicVolume(float volume, bool muted)
+    {
+        volume = muted ? MUTED_VOLUME_LEVEL : audioFalloffCurve.Evaluate(volume);
+        musicMixer.audioMixer.SetFloat(MUSIC_VOLUME_PARAMETER_NAME, volume);
+    }
+
+    public void SetSFXVolume(float volume, bool muted)
+    {
+        volume = muted ? MUTED_VOLUME_LEVEL : audioFalloffCurve.Evaluate(volume);
+        sfxMixer.audioMixer.SetFloat(SFX_VOLUME_PARAMETER_NAME, volume);
+    }
+
+    public void SetVoicesVolume(float volume, bool muted)
+    {
+        volume = muted ? MUTED_VOLUME_LEVEL : audioFalloffCurve.Evaluate(volume);
+        voicesMixer.audioMixer.SetFloat(VOICES_VOLUME_PARAMETER_NAME, volume);
     }
 }

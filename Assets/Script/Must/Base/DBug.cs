@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class DBug
 {
@@ -21,5 +22,6 @@ public static class LogExpand
     public static void Warning(this string message) => Debug.LogWarning(message);
     
     public static void LogWarning(this string message) => Debug.LogWarning(message);
+    public static void LogWarning(this string message,Object context) => Debug.LogWarning(message,context);
     public static void LogWarning(this object message) => Debug.LogWarning(message);
 }

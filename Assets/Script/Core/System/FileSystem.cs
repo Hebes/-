@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class FileSystem
 {
-   private const string KEY = "SECRETKEY";
+    private const string KEY = "SECRETKEY";
 
     public static List<string> ReadTextFile(string filePath, bool includeBlankLines = true)
     {
@@ -19,19 +19,17 @@ public class FileSystem
         List<string> lines = new List<string>();
         try
         {
-            using (StreamReader sr = new StreamReader(filePath))
+            using StreamReader sr = new StreamReader(filePath);
+            while (!sr.EndOfStream)
             {
-                while(!sr.EndOfStream)
-                {
-                    string line = sr.ReadLine();
-                    if (includeBlankLines || !string.IsNullOrWhiteSpace(line))
-                        lines.Add(line);    
-                }
+                string line = sr.ReadLine();
+                if (includeBlankLines || !string.IsNullOrWhiteSpace(line))
+                    lines.Add(line);
             }
         }
         catch (FileNotFoundException ex)
         {
-            Debug.LogError($"File not found: '{ex.FileName}'");
+            Debug.LogError($"文件未找到: '{ex.FileName}'");
         }
 
         return lines;
@@ -42,7 +40,7 @@ public class FileSystem
         TextAsset asset = Resources.Load<TextAsset>(filePath);
         if (asset == null)
         {
-            Debug.LogError($"Asset not found: '{filePath}'");
+            Debug.LogError($"未找到资产: '{filePath}'");
             return null;
         }
 
@@ -87,7 +85,7 @@ public class FileSystem
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Could not create directory! {e}");
+            Debug.LogError($"无法创建目录! {e}");
             return false;
         }
     }
@@ -96,7 +94,7 @@ public class FileSystem
     {
         if (!TryCreateDirectoryFromPath(filePath))
         {
-            Debug.LogError($"FAILED TO SAVE FILE '{filePath}' Please see the console for error details.");
+            Debug.LogError($"保存文件失败 '{filePath}' 请查看控制台了解错误详细信息.");
             return;
         }
 
@@ -115,7 +113,7 @@ public class FileSystem
             sw.Close();
         }
 
-        Debug.Log($"Saved data to file '{filePath}'");
+        Debug.Log($"将数据保存到文件 '{filePath}'");
     }
 
     public static T Load<T>(string filePath, bool encrypt = false)
@@ -135,17 +133,23 @@ public class FileSystem
             }
             else
             {
-                string JSONData = File.ReadAllLines(filePath)[0];
-                return JsonUtility.FromJson<T>(JSONData);
+                string jsonData = File.ReadAllLines(filePath)[0];
+                return JsonUtility.FromJson<T>(jsonData);
             }
         }
         else
         {
-            Debug.LogError($"Error - File does not exist! '{filePath}'");
+            Debug.LogError($"错误-文件不存在! '{filePath}'");
             return default(T);
         }
     }
 
+    /// <summary>
+    /// 加密
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="key"></param>
+    /// <returns></returns>
     private static byte[] XOR(byte[] input, byte[] key)
     {
         byte[] output = new byte[input.Length];

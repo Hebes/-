@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// 音频SFX数据
+/// </summary>
 [System.Serializable]
 public class AudioSFXData
 {
@@ -41,7 +43,7 @@ public class AudioSFXData
         AudioSystem audioSystem = R.AudioSystem;
         List<string> cache = new List<string>();
 
-        foreach (var sound in sfx)
+        foreach (AudioSFXData sound in sfx)
         {
             if (!audioSystem.IsPlayingSoundEffect(sound.fileName))
                 audioSystem.PlaySoundEffect(sound.filePath, volume: sound.volume, pitch: sound.pitch, loop: true);

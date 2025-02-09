@@ -3,7 +3,8 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
-[InitializeOnLoad]
+// [ExecuteInEditMode]//在不运行模式下修改参数,Update
+// [InitializeOnLoad]
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class LanguageComponent : BaseBehaviour
 {
@@ -13,24 +14,27 @@ public class LanguageComponent : BaseBehaviour
 
     private void Awake()
     {
-        _languageData = LanguageSysatem.GetLanguageData(key);
-        LanguageSysatem.AddLanguageComponent(this);
         _textMeshProUGUI = GetComponent<TextMeshProUGUI>();
         key = _textMeshProUGUI.text;
+        _languageData = LanguageSysatem.GetLanguageData(key);
+        LanguageSysatem.AddLanguageComponent(this);
         SetText();
     }
 
     public void SetText()
     {
         if (string.IsNullOrEmpty(key))
-            throw new Exception("没有key");
+        {
+            //$"没有key{key}".LogWarning(this);
+            _languageData = new LanguageData();
+        }
         switch (LanguageSysatem.languageType)
         {
             case LanguageSysatem.LanguageType.Chinese:
-                _textMeshProUGUI.text = _languageData.Chinese;
+                _textMeshProUGUI.text = _languageData.chinese;
                 break;
             case LanguageSysatem.LanguageType.English:
-                _textMeshProUGUI.text = _languageData.Engilsh;
+                _textMeshProUGUI.text = _languageData.engilsh;
                 break;
             default:
                 throw new Exception("未配置语言类型");

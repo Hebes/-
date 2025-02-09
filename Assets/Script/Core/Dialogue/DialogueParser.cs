@@ -10,10 +10,9 @@ public class DialogueParser
 
     public static DIALOGUE_LINE Parse(string rawLine)
     {
-        //$"解析行-'{rawLine}".Log();
         (string speaker, string dialogue, string commands) = RipContent(rawLine);
         commands = TagSystem.Inject(commands);
-        $" 说话者 = {speaker}\n 对话内容 = {dialogue}\n 命令 = {commands}".Log();
+        $"解析行 ={rawLine}\n 说话者 = {speaker}\n 对话内容 = {dialogue}\n 命令 = {commands}".Log();
         return new DIALOGUE_LINE(rawLine, speaker, dialogue, commands);
     }
 

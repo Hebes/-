@@ -14,7 +14,7 @@ public class GraphicLayer
 
     public Coroutine SetTexture(string filePath, float transitionSpeed = 1f, Texture blendingTexture = null, bool immediate = false)
     {
-        Texture tex = R.AssetLoadSystem.Load<Texture>(filePath);
+        Texture tex = R.Load<Texture>(filePath);
         if (tex == null)
         {
             Debug.LogError($"无法从路径加载图形纹理.{filePath}'请确保它存在于资源中!");
@@ -90,25 +90,22 @@ public class GraphicLayer
     /// <param name="immediate">是否立刻</param>
     public void Clear(float transitionSpeed = 1, Texture blendTexture = null, bool immediate = false)
     {
-        if (immediate)
-        {
-            currentGraphic.Destroy();
-        }
-        else
-        {
-            currentGraphic?.FadeOut(transitionSpeed, blendTexture);
-        }
-
-        foreach (GraphicObject g in oldGraphics)
+        if (currentGraphic != null)
         {
             if (immediate)
-            {
-                g.Destroy();
-            }
+                currentGraphic.Destroy();
             else
-            {
+                currentGraphic.FadeOut(transitionSpeed, blendTexture);
+        }
+       
+        for(int i = oldGraphics.Count - 1; i >= 0; i--)
+        //foreach (GraphicObject g in oldGraphics)
+        {
+            GraphicObject g = oldGraphics[i];
+            if (immediate)
+                g.Destroy();
+            else
                 g.FadeOut(transitionSpeed, blendTexture);
-            }
         }
     }
 }

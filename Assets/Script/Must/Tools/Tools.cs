@@ -47,7 +47,10 @@ using UnityEngine.Internal;
 // {
 //    
 // }
-
+public static partial class Tools
+{
+    public static string DesktopPath => $"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}/";
+}
 
 // public static class Tween
 // {

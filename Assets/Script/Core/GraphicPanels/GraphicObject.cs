@@ -28,7 +28,7 @@ public class GraphicObject
     private Coroutine co_fadingIn = null;
     private Coroutine co_fadingOut = null;
 
-    public bool useAudio => (audio != null && !audio.mute);
+    public bool useAudio =>(audio != null ? !audio.mute : false);
 
     public GraphicObject(GraphicLayer layer, string graphicPath, Texture tex, bool immediate)
     {
@@ -94,7 +94,7 @@ public class GraphicObject
 
     private Material GetTransitionMaterial()
     {
-        Material mat = R.AssetLoadSystem.Load<Material>(MATERIAL_PATH);
+        Material mat = R.Load<Material>(MATERIAL_PATH);
         if (mat != null)
             return new Material(mat);
         return null;

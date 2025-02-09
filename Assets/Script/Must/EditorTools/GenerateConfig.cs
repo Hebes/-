@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -49,8 +50,6 @@ public partial class GenerateConfig : EditorWindow
         EditorGUILayout.EndHorizontal();
         CodePreview(_content);
     }
-
-   
 
     private string Template1(string btnName, float btnWidth, Action btnAction, string labelText, string textFieldText)
     {
@@ -109,7 +108,7 @@ public partial class GenerateConfig : EditorWindow
         _content = GetConfig(temp, temp, (sb, v1, v2) =>
         {
             string t1 = Path.GetFileNameWithoutExtension(v1);
-            string t2 = ReplaceStr(t1, "-", "_", "[", "]", " ");
+            string t2 = t1.Replace("-", "_", "[", "]", " ");
             sb.AppendLine($"\tpublic const string {t2} = \"{t1}\";");
         });
     }
@@ -133,8 +132,8 @@ public partial class GenerateConfig : EditorWindow
     private void Generate6()
     {
         string[] temp = GetFilesAllPath($"{Application.dataPath}/Resources", "*.prefab"); //原版
-        string[] key = ReplaceArray(temp, "-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".prefab"); //value
-        string[] value = ReplaceArray(temp, $"{Application.dataPath}/Resources\\", ".prefab"); //key
+        string[] key = temp.Replace("-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".prefab"); //value
+        string[] value = temp.Replace($"{Application.dataPath}/Resources\\", ".prefab"); //key
         _content = GetConfig(key, value, (sb, v1, v2) =>
         {
             v2 = v2.Replace(@"\", "/");
@@ -148,25 +147,14 @@ public partial class GenerateConfig : EditorWindow
     private void Generate7()
     {
         //jpg
-        string[] temp = GetFilesAllPath($"{Application.dataPath}/Resources", "*.jpg"); //原版
-        string[] key = ReplaceArray(temp, "-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".jpg"); //value
-        string[] value = ReplaceArray(temp, $"{Application.dataPath}/Resources\\", ".jpg"); //key
-        string content1 = GetConfig(key, value, (sb, v1, v2) =>
+        string[] temp = GetFilesAllPath($"{Application.dataPath}/Resources", "*.jpg", "*.png"); //原版
+        string[] key = temp.Replace("-", "_", "[", "]", " "); //value
+        _content = GetConfig(key, temp, (sb, v1, v2) =>
         {
             v2 = v2.Replace(@"\", "/");
+            v2 = v2.Replace($"{Application.dataPath}/Resources/", ".jpg", ".png");
             sb.AppendLine($"\tpublic const string {Path.GetFileNameWithoutExtension(v1)} = \"{v2}\";");
         });
-
-        //png
-        string[] temp1 = GetFilesAllPath($"{Application.dataPath}/Resources", "*.png"); //原版
-        string[] key1 = ReplaceArray(temp1, "-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".png"); //value
-        string[] value1 = ReplaceArray(temp1, $"{Application.dataPath}/Resources\\", ".png"); //key
-        string content2 = GetConfig(key1, value1, (sb, v1, v2) =>
-        {
-            v2 = v2.Replace(@"\", "/");
-            sb.AppendLine($"\tpublic const string {Path.GetFileNameWithoutExtension(v1)} = \"{v2}\";");
-        });
-        _content = content1 + content2;
         _content.Copy();
     }
 
@@ -177,63 +165,70 @@ public partial class GenerateConfig : EditorWindow
     {
         //jpg
         string[] temp = GetFilesAllPath($"{Application.dataPath}/Resources", "*.mp4"); //原版
-        string[] key = ReplaceArray(temp, "-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".mp4"); //value
-        string[] value = ReplaceArray(temp, $"{Application.dataPath}/Resources\\", ".mp4"); //key
+        string[] key = temp.Replace("-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".mp4"); //value
+        string[] value = temp.Replace($"{Application.dataPath}/Resources\\", ".mp4"); //key
         _content = GetConfig(key, value, (sb, v1, v2) =>
         {
             v2 = v2.Replace(@"\", "/");
             sb.AppendLine($"\tpublic const string {Path.GetFileNameWithoutExtension(v1)} = \"{v2}\";");
         });
     }
-    
+
     /// <summary>
     /// Music
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
     private void Generate9()
     {
-        string[] temp = GetFilesAllPath($"{Application.dataPath}/Resources", "*.wav"); //原版
-        string[] key = ReplaceArray(temp, "-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".wav"); //value
-        string[] value = ReplaceArray(temp, $"{Application.dataPath}/Resources\\", ".wav"); //key
-        string content1 = GetConfig(key, value, (sb, v1, v2) =>
+        string[] temp = GetFilesAllPath($"{Application.dataPath}/Resources", "*.wav", "*.mp3"); //原版
+        string[] key = temp.Replace("-", "_", "[", "]", " "); //value
+        _content = GetConfig(key, temp, (sb, v1, v2) =>
         {
             v2 = v2.Replace(@"\", "/");
+            v2 = v2.Replace($"{Application.dataPath}/Resources/", ".wav", ".mp3");
             sb.AppendLine($"\tpublic const string {Path.GetFileNameWithoutExtension(v1)} = \"{v2}\";");
         });
-        
-        string[] temp1 = GetFilesAllPath($"{Application.dataPath}/Resources", "*.mp3"); //原版
-        string[] key1 = ReplaceArray(temp1, "-", "_", "[", "]", " ", $"{Application.dataPath}/Resources\\", ".mp3"); //value
-        string[] value1 = ReplaceArray(temp1, $"{Application.dataPath}/Resources\\", ".mp3"); //key
-        string content2 = GetConfig(key1, value1, (sb, v1, v2) =>
-        {
-            v2 = v2.Replace(@"\", "/");
-            sb.AppendLine($"\tpublic const string {Path.GetFileNameWithoutExtension(v1)} = \"{v2}\";");
-        });
-        
-        _content = content1 + content2;
         _content.Copy();
     }
+}
 
-    private static string[] ReplaceArray(string[] keyArray, params string[] valueArray)
+/// <summary>
+/// Assets
+/// </summary>
+public partial class GenerateConfig
+{
+    [MenuItem("Assets/工具/获取Image")]
+    static void AssetsTools01()
     {
-        string[] newKeyArray = new string[keyArray.Length];
-        for (var i = 0; i < keyArray.Length; i++)
-            newKeyArray[i] = ReplaceStr(keyArray[i], valueArray);
-        return newKeyArray;
+        
+        string[] str = Selection.assetGUIDs; //它们被导进Unity时一定都会被序列化出一个唯一ID存到.meta文件中，因此，根据唯一ID可以找到文件或文件夹
+        string str1 = AssetDatabase.GUIDToAssetPath(str[0]).Replace("Assets",String.Empty);
+        string[] temp = GetFilesAllPath($"{Application.dataPath}{str1}", "*.jpg", "*.png"); //原版
+        string[] key = temp.Replace("-", "_", "[", "]", " "); //value
+       string strTemp = GetConfig(key, temp, (sb, v1, v2) =>
+        {
+            v2 = v2.Replace(@"\", "/");
+            v2 = v2.Replace($"{Application.dataPath}/Resources/",".jpg", ".png");
+            sb.AppendLine($"\tpublic const string {Path.GetFileNameWithoutExtension(v1)} = \"{v2}\";");
+        });
+        strTemp.EditorLog();
+        strTemp.Copy();
     }
+}
 
-    private static string ReplaceStr(string key, params string[] valueArray)
+public partial class GenerateConfig
+{
+    private static string[] GetFilesAllPath(string path, params string[] suffix)
     {
-        foreach (string s in valueArray)
-            key = key.Replace(s, string.Empty);
-        return key;
-    }
+        List<string> strings = new List<string>();
+        foreach (string s in suffix)
+        {
+            string[] string1 = Directory.GetFiles(path, s, SearchOption.AllDirectories);
+            strings.AddRange(string1);
+        }
 
-    private static string[] GetFilesAllPath(string path, string suffix)
-    {
-        string[] strings = Directory.GetFiles(path, suffix, SearchOption.AllDirectories);
-        string[] valueArray = new string[strings.Length];
-        for (var i = 0; i < strings.Length; i++)
+        string[] valueArray = new string[strings.Count];
+        for (var i = 0; i < strings.Count; i++)
             valueArray[i] = strings[i];
         return valueArray;
     }
@@ -247,7 +242,6 @@ public partial class GenerateConfig : EditorWindow
         str.Copy();
         return str;
     }
-
 
     /// <summary>
     /// 代码预览

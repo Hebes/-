@@ -17,7 +17,7 @@ public class CanvasGroupController
     private bool IsHiding => co_hiding != null;
 
     public bool IsFading => IsShowing || IsHiding;
-    public bool IsVisible => IsShowing || rootCG.alpha > 0;
+    public bool IsVisible => co_showing != null || rootCG.alpha > 0;
 
     public float alpha
     {
@@ -62,14 +62,12 @@ public class CanvasGroupController
         CanvasGroup cg = rootCG;
 
         if (immediate)
-        {
             cg.alpha = alpha;
-        }
 
-        while (!Mathf.Approximately(cg.alpha, alpha))
+        while (cg.alpha != alpha)
         {
-            cg.alpha = Mathf.MoveTowards(cg.alpha, alpha, R.DeltaTime * DEFAULT_FADE_SPEED * speed);
             yield return null;
+            cg.alpha = Mathf.MoveTowards(cg.alpha, alpha, Time.deltaTime * DEFAULT_FADE_SPEED * speed);
         }
 
         co_showing = null;

@@ -1,24 +1,20 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// 历史上的导航
+/// </summary>
 public class HistoryNavigation : MonoBehaviour
 {
     public int progress = 0;
-
-    [SerializeField] private TextMeshProUGUI statusText;
-
-    HistorySystem System => HistorySystem.instance;
-    List<HistoryState> history => System.history;
-
-    HistoryState cachedState = null;
+    private HistoryState cachedState = null;
     private bool isOnCachedState = false;
+    public bool isViewingHistory = false; //历史是否可见
 
-    public bool isViewingHistory = false;
-
+    private TextMeshProUGUI statusText => R.UISystem.UIDialogue.historyState;
     public bool canNavigate => !R.DialogueSystem.ConversationManager.IsOnLogicalLine;
-
+    private List<HistoryState> history => R.HistorySystem.history;
 
     public void GoForward()
     {

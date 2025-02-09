@@ -17,5 +17,5 @@ public class DialogueSystemConfigurationSO : ScriptableObject
     public float defaultDialogueFontSize = 18;
     public float defaultNameFontSize = 22;
 
-     public TextArchitect.BuildMethod buildMethod = TextArchitect.BuildMethod.TypeWriter;
+     public TABuilder.BuilderTypes buildMethod = TABuilder.BuilderTypes.Typewriter;
 }

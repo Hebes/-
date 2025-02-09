@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// 命令系统 数据
@@ -8,13 +9,12 @@ public class DL_COMMAND_DATA
 {
     public DL_COMMAND_DATA(string rawCommands)
     {
-        commands = RipCommands(rawCommands);
+        Commands = RipCommands(rawCommands);
     }
 
-    public List<Command> commands;
-    private const char COMMANDSPLITTER_ID = ',';
-    private const char ARGUMENTSCONTAINER_ID = '(';
+    public List<Command> Commands;
     private const string WAITCOMMAND_ID = "[wait]";
+    private const string COMMAND_PATTERN = @"([\w\.|\d+|\[|\]])*\(([^)]*)\),?";
 
     public struct Command
     {
@@ -33,29 +33,53 @@ public class DL_COMMAND_DATA
     /// <returns></returns>
     private List<Command> RipCommands(string rawCommands)
     {
-        string[] data = rawCommands.Split(COMMANDSPLITTER_ID, System.StringSplitOptions.RemoveEmptyEntries);
+        MatchCollection data = Regex.Matches(rawCommands, COMMAND_PATTERN);
         List<Command> result = new List<Command>();
-        foreach (string cmd in data)
+        foreach (Match cmd in data)
         {
             Command command = new Command();
-            int index = cmd.IndexOf(ARGUMENTSCONTAINER_ID);
-            command.Name = cmd.Substring(0, index).Trim();
+            string[] parts = cmd.Value.Split('(');
+
+            command.Name = parts[0].Trim();
+
             if (command.Name.ToLower().StartsWith(WAITCOMMAND_ID))
             {
                 command.Name = command.Name.Substring(WAITCOMMAND_ID.Length);
-                command.WaitForCompletion = true;//是否等待完成执行
+                command.WaitForCompletion = true;
             }
             else
-            {
                 command.WaitForCompletion = false;
-            }
 
-            string content = cmd.Substring(index + 1, cmd.Length - index - 2);
-            command.Arguments = GetArgs(content);
+            string arguments = parts[1].TrimEnd(')', ',');
+            command.Arguments = GetArgs(arguments);
+
             result.Add(command);
         }
 
         return result;
+        // string[] data = rawCommands.Split(COMMANDSPLITTER_ID, System.StringSplitOptions.RemoveEmptyEntries);
+        // List<Command> result = new List<Command>();
+        // foreach (string cmd in data)
+        // {
+        //     Command command = new Command();
+        //     int index = cmd.IndexOf(ARGUMENTSCONTAINER_ID);
+        //     command.Name = cmd.Substring(0, index).Trim();
+        //     if (command.Name.ToLower().StartsWith(WAITCOMMAND_ID))
+        //     {
+        //         command.Name = command.Name.Substring(WAITCOMMAND_ID.Length);
+        //         command.WaitForCompletion = true;//是否等待完成执行
+        //     }
+        //     else
+        //     {
+        //         command.WaitForCompletion = false;
+        //     }
+        //
+        //     string content = cmd.Substring(index + 1, cmd.Length - index - 2);
+        //     command.Arguments = GetArgs(content);
+        //     result.Add(command);
+        // }
+        //
+        // return result;
     }
 
     private string[] GetArgs(string args)

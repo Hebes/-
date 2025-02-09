@@ -11,24 +11,25 @@ public class GraphicPanelSystem : SM<GraphicPanelSystem>
 
     private void Awake()
     {
-        GameObject layersGo = GameObject.Find("Layers");
-        allPanels = new GraphicPanel[layersGo.transform.childCount];
+        Transform layersGo = R.UITotalRoot.FindComponent("Layers");
+        allPanels = new GraphicPanel[3];
         allPanels[0] = new GraphicPanel
         {
             panelName = "Background",
-            rootPanel = layersGo.transform.FindChildByName("01Background").gameObject,
+            rootPanel = layersGo.FindComponent("01Background").gameObject,
         };
         allPanels[1] = new GraphicPanel
         {
             panelName = "Cinematic",
-            rootPanel = layersGo.transform.FindChildByName("03Cinematic").gameObject,
+            rootPanel = layersGo.FindComponent("03Cinematic").gameObject,
         };
         allPanels[2] = new GraphicPanel
         {
             panelName = "Foreground",
-            rootPanel = layersGo.transform.FindChildByName("05Foreground").gameObject,
+            rootPanel = layersGo.FindComponent("05Foreground").gameObject,
         };
     }
+
 
     public GraphicPanel GetPanel(string name)
     {

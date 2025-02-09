@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
+/// <summary>
+/// 对话数据
+/// </summary>
 [System.Serializable]
 public class DialogueData
 {
@@ -21,9 +23,9 @@ public class DialogueData
     {
         DialogueData data = new DialogueData();
 
-        var ds = R. DialogueSystem;
-        var dialogueText = ds.dialogueContainer.dialogueText;
-        var nameText = ds.dialogueContainer.nameContainer.NameText;
+        var ds = R.DialogueSystem;
+        var dialogueText = ds.dialogueContainer.uiDialogue. dialogueText;
+        var nameText = ds.dialogueContainer.uiDialogue.NameText;
 
         data.currentDialogue = dialogueText.text;
         data.dialogueFont = FilePaths.resources_font + dialogueText.font.name;
@@ -40,18 +42,18 @@ public class DialogueData
 
     public static void Apply(DialogueData data)
     {
-        var ds = R .DialogueSystem;
-        var dialogueText = ds.dialogueContainer.dialogueText;
-        var nameText = ds.dialogueContainer.nameContainer.NameText;
-        R.DialogueSystem.TextArchitect.SetText(data.currentDialogue);
+        var ds = R.DialogueSystem;
+        var dialogueText = ds.dialogueContainer.uiDialogue.dialogueText;
+        var nameText = ds.dialogueContainer.uiDialogue.NameText;
+        ds.TextArchitect.SetText(data.currentDialogue);
         dialogueText.color = data.dialogueColor;
         dialogueText.fontSize = data.dialogueScale;
 
         nameText.text = data.currentSpeaker;
         if (nameText.text != string.Empty)
-            ds.dialogueContainer.nameContainer.Show();
+            ds.dialogueContainer.uiDialogue.Show();
         else
-            ds.dialogueContainer.nameContainer.Hide();
+            ds.dialogueContainer.uiDialogue.Hide();
 
         nameText.color = data.speakerNameColor;
         nameText.fontSize = data.speakerScale;

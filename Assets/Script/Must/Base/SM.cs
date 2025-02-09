@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// SingletonMono
@@ -18,7 +19,13 @@ public class SM<T> : MonoBehaviour where T : SM<T>
     {
         get
         {
-            if (_instance) return _instance;
+            Type typeTemp = typeof(T); //用于观察使用;
+
+            if (_instance)
+            {
+                string testScene = _instance?.gameObject?.scene.name; //用于观察使用;
+                return _instance;
+            }
 
             lock (_lock)
             {
@@ -32,19 +39,14 @@ public class SM<T> : MonoBehaviour where T : SM<T>
 
             //更具特性决定是否DontDestroyOnLoad
             Type type = _instance.GetType();
-            if (!Attribute.IsDefined(type, typeof(NoDontDestroyOnLoad)) || _instance.transform.parent == null)
+            if (!Attribute.IsDefined(type, typeof(NoDontDestroyOnLoad)))
             {
                 DontDestroyOnLoad(_instance.gameObject);
             }
 
             return _instance;
         }
-        protected set
-        {
-            if (_instance) return;
-            _instance = value;
-            DontDestroyOnLoad(_instance);
-        }
+        protected set => _instance = value;
     }
 
     public new GameObject gameObject
@@ -74,6 +76,13 @@ public class SM<T> : MonoBehaviour where T : SM<T>
             return result;
         }
     }
+
+    protected void CheckRepetition(Object obj)
+    {
+        if (obj == _instance) return;
+        if (obj is MonoBehaviour go)
+            Destroy(go.gameObject);
+    } //检查重复的,例如脚本已经挂载场景中的吗，请在Awake调用
 }
 
 
@@ -90,5 +99,9 @@ public class Singleton1<T> where T : class, new()
 
 //注解
 public class NoDontDestroyOnLoad : Attribute
+{
+}
+
+public class CheckOnly : Attribute
 {
 }

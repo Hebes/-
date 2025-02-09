@@ -161,51 +161,34 @@ Monk.Hide(), Raelin.Hide(), Haruka.SetPosition(0.5 -spd 1.5), Haruka.SetSprite("
 
 Haruka "Raelin?{c}你在哪里?"
 
-CreateCharacter(Glo), Glo.SetPosition(1)
-enter Glo as ??? [Confused] "Haruka? 那是你吗?"
+CreateCharacter(Shiina), Shiina.SetPosition(1)
+enter Shiina as ??? [shy] "Haruka? 那是你吗?"
 
 Haruka.FaceRight(), Haruka.SetSprite("cry,cry"), Haruka.Move(0.3)
 Haruka "Hmm?"
 
-Glo.SetSprite(Happy), [wait]Glo.Move(0.6 -spd 2), Glo.Animate(Hop)
-Glo "是你!{a} Haruka!"
+Shiina.SetSprite(laugh), [wait]Shiina.Move(0.6 -spd 2), Shiina.Animate(Hop)
+Shiina "是你!{a} Haruka!"
 
 Haruka.SetSprite("cry,laughblush")
-Haruka "是你, Glo!{c}好久没见到你了，你好吗，小家伙?"
+Haruka "是你, Shiina!{c}好久没见到你了，你好吗，小家伙?"
 
-Glo "狂喜!{c}但不像我现在这么想! 见到你我太激动了!"
-Glo.Animate(Hop)
+Shiina "狂喜!{c}但不像我现在这么想! 见到你我太激动了!"
+Shiina.Animate(Hop)
 wait(0.3)
-Glo.Move(0.7 -spd 2), Glo.SetSprite(Scared), Glo.Animate(Shiver true)
+Shiina.Move(0.7 -spd 2), Shiina.SetSprite(shy), Shiina.Animate(Shiver true)
 "哦!法拉也好久没见过你了！她会很激动的!!!"
 
-Haruka "呵呵，我也很高兴见到你, Glo."
+Haruka "呵呵，我也很高兴见到你, Shiina."
 
-Glo.SetSprite(default), Glo.Animate(Shiver false)
-Glo "来吧，我带你去见Farah"
+Shiina.SetSprite(shy), Shiina.Animate(Shiver false)
+Shiina "来吧，我带你去见Farah"
 
-Glo.move(-0.3 -spd 3), Haruka.Move(-0.3 -spd 3)
-wait(1), Hide(Glo Haruka -i true)
-SetLayerMedia(background "Fantasy Landscape" -aud true -blend hurricane)
+Shiina.move(-0.3 -spd 3), Haruka.Move(-0.3 -spd 3)
+wait(1), Hide(Shiina Haruka -i true)
+SetLayerMedia(background "FantasyLandscape" -aud true -blend hurricane)
 
 PlaySong(Happy -p 0.7)
-Show(Glo Haruka), Haruka.Move(0.3), Glo.Move(0.1), Glo.FaceRight()
+Show(Shiina Haruka), Haruka.Move(0.3), Shiina.Move(0.1), Shiina.FaceRight()
 
-CreateCharacter(Farah -e true), Farah.SetPosition(1)
-Farah.Show()
-
-Glo.Animate(Hop)
-Glo "Farah, 看看我带来了谁!"
-
-Farah.SetSprite(Happy)
-Farah "Haruka!{a} 天啊，好久没见了!"
-
-Haruka "Hi, Farah! 你过得怎么样?"
-
-Farah.SetSprite(Default)
-Farah "非常好. Glo,尼克和我一直很忙。房子就完工了!"
-
-Farah.SetSprite(Irritated)
-"但是, <color=red><i>恶魔</i></color> 一直忙着破坏一切吗."
-
-Hide(Glo Farah), Show(Raelin)
+Hide(Shiina Farah), Show(Raelin)
