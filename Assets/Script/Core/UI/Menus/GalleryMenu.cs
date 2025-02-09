@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class GalleryMenu : MonoBehaviour
 {
     public static GalleryMenu I;
-    
+
     private const int PAGE_BUTTON_LIMIT = 2;
     private int maxPages = 0;
     private int selectedPage = 0;
@@ -35,7 +35,7 @@ public class GalleryMenu : MonoBehaviour
 
     private void Awake()
     {
-        I=this;
+        I = this;
         root = transform.FindComponent<CanvasGroup>();
         transform.FindComponent("Gallery Images").FindChildList<Button>(ref galleryPreviewButtons);
         panelSelectionButtonPrefab = transform.FindComponentByName<Button>("Page");
@@ -44,26 +44,10 @@ public class GalleryMenu : MonoBehaviour
 
         previewPanel = transform.FindComponentByName<CanvasGroup>("Preview Panel");
         previewButton = transform.FindComponentByName<Button>("Preview Button");
-        
-        
 
-        GetAllGalleryImages();//加载全部的画廊图片
+
+        GetAllGalleryImages(); //加载全部的画廊图片
     }
-
-    private void OnEnable()
-    {
-        transform.FindComponentByName<Button>("Exit Button").onClick.AddListener(Close);
-        prevButton.onClick.AddListener(ToPreviousPage);
-        nextButton.onClick.AddListener(ToNextPage);
-    }
-
-    private void OnDisable()
-    {
-        transform.FindComponentByName<Button>("Exit Button").onClick.RemoveListener(Close);
-        prevButton.onClick.RemoveListener(ToPreviousPage);
-        nextButton.onClick.RemoveListener(ToNextPage);
-    }
-
 
     void Start()
     {
@@ -71,6 +55,13 @@ public class GalleryMenu : MonoBehaviour
         previewPanelCG = new CanvasGroupController(this, previewPanel);
 
         GalleryConfig.Load();
+
+        var exitButton = transform.FindComponentByName<Button>("Exit Button");
+        
+        previewButton.onClick.AddListener(HidePreviewImage);
+        exitButton.onClick.AddListener(Close);
+        prevButton.onClick.AddListener(ToPreviousPage);
+        nextButton.onClick.AddListener(ToNextPage);
     }
 
     public void Open()
