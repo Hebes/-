@@ -1,5 +1,3 @@
-CreateCharacter(Haruka), CreateCharacter(Raelin)
-
 Haruka.SetSprite("cry,cry")
 
 SetLayerMedia(background inn_night_1), PlaySong(Calm2)
