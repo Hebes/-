@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Visual Novel视觉小说 系统
 /// </summary>
+[NoDontDestroyOnLoad]
 [RequireComponent(typeof(VNDatabaseLinkSetup))]
 public class VNSystem : SM<VNSystem>
 {
@@ -12,6 +13,7 @@ public class VNSystem : SM<VNSystem>
 
     private void Awake()
     {
+        I = this;
         mainCamera = Camera.main;
         VNDatabaseLinkSetup linkSetup = GetComponent<VNDatabaseLinkSetup>();
         linkSetup.SetupExternalLinks();

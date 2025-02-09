@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿#if UNITY_EDITOR
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -65,3 +66,4 @@ public static partial class EditorMethod
             EditorWindow.GetWindow(typeof(T)).Close();
     }
 }
+#endif

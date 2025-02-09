@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 图形面板系统
 /// </summary>
+[NoDontDestroyOnLoad]
 public class GraphicPanelSystem : SM<GraphicPanelSystem>
 {
     public const float DEFAULT_TRANSITION_SPEED = 3f;
@@ -11,6 +12,7 @@ public class GraphicPanelSystem : SM<GraphicPanelSystem>
 
     private void Awake()
     {
+        I = this;
         Transform layersGo = R.UITotalRoot.FindComponent("Layers");
         allPanels = new GraphicPanel[3];
         allPanels[0] = new GraphicPanel

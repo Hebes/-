@@ -13,7 +13,7 @@ public abstract class Character
         if (prefab!= null)
         {
             // Transform parentPanel = (config.characterType == CharacterType.Live2D ? R.UISystem.UICharacters.characterPanelLive2D : R.UISystem.UICharacters.transform);
-             Transform parentPanel = R.UISystem.UICharacters.transform;
+             Transform parentPanel = R.UITotalRoot.FindComponent<UICharacters>().transform;
             //这里才Instantiate
             GameObject go = prefab.Instantiate(parentPanel);
             go.name = R.CharacterSystem.FormatCharacterPath(ConfigString.CharacterPrefabNameFormat, name);
